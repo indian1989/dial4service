@@ -10,11 +10,35 @@
 "bcryptjs": "^2.4.3",
 "dotenv": "^16.3.1",
 
-
-
-
-
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
-<title
+  <title>Dial4Service – Local Services</title>
+</head>
+<body>
+
+<h1>Dial4Service</h1>
+
+<!-- SEARCH -->
+<form action="search.html">
+  <input type="text" name="city" placeholder="Enter City" required>
+  <input type="text" name="category" placeholder="Service (Plumber, Doctor)" required>
+  <button type="submit">Search</button>
+</form>
+
+<h2>Popular Categories</h2>
+<div id="categories"></div>
+
+<script>
+fetch("https://YOUR-RENDER-URL/api/category/popular")
+.then(res=>res.json())
+.then(data=>{
+  const div = document.getElementById("categories");
+  data.forEach(c=>{
+    div.innerHTML += `<p>${c.name}</p>`;
+  });
+});
+</script>
+
+</body>
+</html>
