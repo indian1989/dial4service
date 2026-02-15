@@ -1,1 +1,39 @@
-dashboard.html
+<h2>Provider Dashboard</h2>
+
+<form id="addBusiness">
+  <input placeholder="Business Name" id="name"><br>
+  <input placeholder="Category" id="category"><br>
+  <input placeholder="City" id="city"><br>
+  <input placeholder="District" id="district"><br>
+  <input placeholder="State" id="state"><br>
+  <input placeholder="Phone" id="phone"><br>
+  <input placeholder="Email" id="email"><br>
+  <button>Add Business</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+document.getElementById("addBusiness").onsubmit = async e => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("https://dial4service.onrender.com/api/business/add",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":token
+    },
+    body: JSON.stringify({
+      name:name.value,
+      category:category.value,
+      city:city.value,
+      phone:phone.value
+    })
+  });
+
+  const data = await res.text();
+  msg.innerText = data;
+};
+</script>
