@@ -1,1 +1,37 @@
-dashboard.html
+<h2>Admin Dashboard</h2>
+<div id="list"></div>
+
+<script>
+const token = localStorage.getItem("token");
+
+fetch("https://dial4service.onrender.com/api/business/pending",{
+  headers:{ "Authorization":token }
+})
+.then(res=>res.json())
+.then(data=>{
+  const div = document.getElementById("list");
+  data.forEach(b=>{
+    div.innerHTML += `
+      <p>
+        ${b.name} - ${b.city}
+        <button onclick="approve('${b._id}')">✔</button>
+        <button onclick="reject('${b._id}')">✖</button>
+      </p>
+    `;
+  });
+});
+
+function approve(id){
+  fetch(`/api/admin/approve/${id}`,{
+    method:"PUT",
+    headers:{ "Authorization":token }
+  }).then(()=>location.reload());
+}
+
+function reject(id){
+  fetch(`/api/admin/reject/${id}`,{
+    method:"PUT",
+    headers:{ "Authorization":token }
+  }).then(()=>location.reload());
+}
+</script>
