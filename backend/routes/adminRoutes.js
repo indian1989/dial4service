@@ -13,3 +13,11 @@ router.post("/login", async(req,res)=>{
 });
 
 module.exports = router;
+
+const Business = require("../models/Business");
+const auth = require("../middleware/auth");
+
+router.put("/approve/:id", auth("admin"), async(req,res)=>{
+  await Business.findByIdAndUpdate(req.params.id,{status:"approved"});
+  res.json("Approved");
+});
