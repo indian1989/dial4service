@@ -70,5 +70,38 @@ if(!$conn){die("Database Connecton Failed");}
 <
 <
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Results</title>
+</head>
+<body>
+
+<h2>Search Results</h2>
+<div id="results"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const city = params.get("city");
+const category = params.get("category");
+
+fetch(`https://YOUR-RENDER-URL/api/business/search?city=${city}&category=${category}`)
+.then(res=>res.json())
+.then(data=>{
+  const div = document.getElementById("results");
+  data.forEach(b=>{
+    div.innerHTML += `
+      <h3>${b.name}</h3>
+      <p>${b.city} | ${b.category}</p>
+      <p>📞 ${b.phone}</p>
+      <hr>
+    `;
+  });
+});
+</script>
+
+</body>
+</html>
+
 
 
