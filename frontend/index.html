@@ -161,8 +161,31 @@ function detectLocation(){
   });
  }
 }
+
+function nearMe(){
+  if(!navigator.geolocation){
+    alert("GPS supported nahi hai");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position=>{
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // search page par redirect
+      window.location.href =
+        `search.html?lat=${lat}&lng=${lng}`;
+    },
+    ()=>{
+      alert("Location permission allow karein");
+    }
+  );
+}
 </script>
+
 
 </body>
 </html>
+
 
