@@ -1,46 +1,223 @@
-{
-"name: "Dail4Service",
-"version": "1.0.0",
-"main: server.js",
-"scripts": {
-"start": "node server.js",
-"dev": nodemon server.js'
-},
-"dependecies": {
-"bcryptjs": "^2.4.3",
-"dotenv": "^16.3.1",
-
-  <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Dial4Service – Find Services Near You</title>
+  <meta charset="UTF-8" />
+  <title>Dial4Service – Find Local Services Near You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find trusted plumbers, electricians, repair services near you" />
+
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5}
+    a{text-decoration:none;color:#333}
+
+    /* TOP HEADER */
+    .top-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 20px;
+      background:#fff;
+      border-bottom:1px solid #ddd;
+    }
+
+    .location-box select,.location-box button{
+      padding:6px;
+      margin-right:5px;
+    }
+
+    .logo h1{margin:0;color:#0a66c2}
+    .logo small{display:block;color:#555;font-size:12px}
+
+    .menu a{
+      margin-left:15px;
+      font-weight:bold;
+    }
+
+    /* SEARCH HEADER */
+    .search-header{
+      background:#0a66c2;
+      padding:15px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+    }
+
+    .search-header select,.search-header button{
+      padding:10px;
+      width:180px;
+    }
+
+    .search-header button{
+      background:#ffcc00;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    /* AD BANNER */
+    .ad-banner{
+      background:#fff;
+      margin:15px;
+      padding:10px;
+      text-align:center;
+      border:2px dashed #ccc;
+    }
+
+    .ad-banner img{
+      max-width:100%;
+      height:200px;
+      object-fit:cover;
+    }
+
+    /* POPULAR CATEGORIES */
+    .section{
+      padding:20px;
+      background:#fff;
+      margin:15px;
+    }
+
+    .section h2{
+      margin-bottom:15px;
+    }
+
+    .categories{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      gap:15px;
+    }
+
+    .category{
+      text-align:center;
+      background:#fafafa;
+      padding:10px;
+      border-radius:5px;
+      cursor:pointer;
+    }
+
+    .category img{
+      width:60px;
+      height:60px;
+    }
+
+    /* FOOTER */
+    footer{
+      background:#222;
+      color:#fff;
+      padding:20px;
+    }
+
+    footer a{color:#ccc;font-size:14px}
+  </style>
 </head>
+
 <body>
 
-<h1>Dial4Service</h1>
+<!-- HEADER TOP -->
+<div class="top-header">
+  <!-- Location -->
+  <div class="location-box">
+    📍
+    <select id="citySelect">
+      <option value="">Select City</option>
+      <option>Delhi</option>
+      <option>Mumbai</option>
+      <option>Lucknow</option>
+    </select>
+    <button onclick="detectLocation()">Detect</button>
+  </div>
 
-<!-- SEARCH -->
-<form action="search.html">
-  <input type="text" name="city" placeholder="Enter City" required>
-  <input type="text" name="category" placeholder="Service (Plumber, Doctor)" required>
-  <button type="submit">Search</button>
-</form>
+  <!-- Logo -->
+  <div class="logo">
+    <h1>Dial4Service</h1>
+    <small>Find Trusted Local Services Near You</small>
+  </div>
 
-<h2>Popular Categories</h2>
-<div id="categories"></div>
+  <!-- Menu -->
+  <div class="menu">
+    <a href="index.html">Home</a>
+    <a href="search.html">All Businesses</a>
+    <a href="provider/login.html">Add Business</a>
+    <a href="#">Advertisement</a>
+  </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-header">
+  <select id="searchCity">
+    <option value="">City</option>
+    <option>Delhi</option>
+    <option>Mumbai</option>
+  </select>
+
+  <select id="searchCategory">
+    <option value="">Category</option>
+    <option>Plumber</option>
+    <option>Electrician</option>
+    <option>Car Repair</option>
+  </select>
+
+  <button onclick="search()">Search</button>
+</div>
+
+<!-- ADVERTISEMENT BANNER -->
+<div class="ad-banner">
+  <p><strong>Customer Advertisement</strong></p>
+  <!-- after payment dynamic image -->
+  <img src="https://via.placeholder.com/1200x300?text=Your+Ad+Here" alt="Ad Banner">
+</div>
+
+<!-- POPULAR CATEGORIES -->
+<div class="section">
+  <h2>Popular Categories</h2>
+  <div class="categories">
+    <div class="category">
+      <img src="https://img.icons8.com/color/96/plumber.png"/>
+      <p>Plumber</p>
+    </div>
+    <div class="category">
+      <img src="https://img.icons8.com/color/96/electrical.png"/>
+      <p>Electrician</p>
+    </div>
+    <div class="category">
+      <img src="https://img.icons8.com/color/96/car.png"/>
+      <p>Car Repair</p>
+    </div>
+    <div class="category">
+      <img src="https://img.icons8.com/color/96/home.png"/>
+      <p>Real Estate</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Dial4Service</strong></p>
+  <p>India's trusted local business directory</p>
+  <p>
+    <a href="#">About</a> |
+    <a href="#">Contact</a> |
+    <a href="#">Privacy</a>
+  </p>
+  <p>© 2026 Dial4Service</p>
+</footer>
 
 <script>
-fetch("https://dial4service.onrender.com/api/category/popular")
-.then(res=>res.json())
-.then(data=>{
-  const div = document.getElementById("categories");
-  data.forEach(c=>{
-    div.innerHTML += `<p>${c.name}</p>`;
-  });
-});
+function detectLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      alert("Location detected");
+    });
+  }else{
+    alert("Location not supported");
+  }
+}
+
+function search(){
+  const city=document.getElementById("searchCity").value;
+  const cat=document.getElementById("searchCategory").value;
+  window.location.href=`search.html?city=${city}&category=${cat}`;
+}
 </script>
 
 </body>
 </html>
-
-
