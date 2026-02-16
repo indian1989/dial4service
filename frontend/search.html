@@ -55,51 +55,89 @@ a{text-decoration:none;color:#333}
 </div>
 
 <script>
+<script>
 const API = "https://dial4service.onrender.com/api";
 
-const params = new URLSearchParams(location.search);
-const city = params.get("city");
-const category = params.get("category");
+const params = new URLSearchParams(window.location.search);
 const lat = params.get("lat");
 const lng = params.get("lng");
+const city = params.get("city");
+const category = params.get("category");
 
-let url = API + "/business/search?";
+let url = "";
 
-if(city) url += `city=${city}&`;
-if(category) url += `category=${category}&`;
-if(lat && lng) url += `lat=${lat}&lng=${lng}`;
+if(lat && lng){
+  url = `${API}/business/nearby?lat=${lat}&lng=${lng}`;
+}else{
+  url = `${API}/business/search?`;
+  if(city) url += `city=${city}&`;
+  if(category) url += `category=${category}&`;
+}
 
 fetch(url)
 .then(res=>res.json())
 .then(data=>{
- if(!data.length){
-  resultBox.innerHTML = `<div class="no-data">No businesses found</div>`;
-  return;
- }
+  if(!data.length){
+    document.getElementById("resultBox").innerHTML =
+      "<p style='text-align:center'>No result found</p>";
+    return;
+  }
 
- title.innerText =
-  (category ? category : "All Services") +
-  (city ? " in "+city : "");
+  showResults(data);
 
- let html="";
- data.forEach(b=>{
-  html+=`
-   <div class="card">
-    <h3>${b.name}</h3>
-    <small>${b.category} • ${b.city}</small>
-    <p>${b.address || ""}</p>
-    <div class="rating">⭐ ${b.rating ? b.rating.toFixed(1) : "New"}</div>
-    <a class="call" href="tel:${b.phone}">📞 Call Now</a>
-   </div>
-  `;
- });
- resultBox.innerHTML = html;
+  if(lat && lng){
+    loadMap(parseFloat(lat), parseFloat(lng), data);
+  }
 });
+
+function showResults(data){
+  let html="";
+  data.forEach(b=>{
+    html+=`
+      <div class="card">
+        <h3>${b.name}</h3>
+        <p>${b.category} • ${b.city}</p>
+        <p>${b.address || ""}</p>
+        <strong>⭐ ${b.rating || "New"}</strong>
+        <a href="tel:${b.phone}" class="call">📞 Call</a>
+      </div>
+    `;
+  });
+  document.getElementById("resultBox").innerHTML = html;
+}
+
+/* GOOGLE MAP */
+function loadMap(lat,lng,data){
+  const map = new google.maps.Map(document.getElementById("map"),{
+    center:{lat:lat,lng:lng},
+    zoom:13
+  });
+
+  // user location marker
+  new google.maps.Marker({
+    position:{lat:lat,lng:lng},
+    map:map,
+    icon:"http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+  });
+
+  data.forEach(b=>{
+    if(!b.location) return;
+    new google.maps.Marker({
+      position:{
+        lat:b.location.coordinates[1],
+        lng:b.location.coordinates[0]
+      },
+      map:map,
+      title:b.name
+    });
+  });
+}
 </script>
 
  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_KEY"></script>
 
 </body>
 </html>
+
 
 
