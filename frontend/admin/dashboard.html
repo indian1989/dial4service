@@ -1,37 +1,90 @@
-<h2>Admin Dashboard</h2>
-<div id="list"></div>
 
-<script>
-const token = localStorage.getItem("token");
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - Add Business</title>
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
 
-fetch("https://dial4service.onrender.com/api/business/pending",{
-  headers:{ "Authorization":token }
-})
-.then(res=>res.json())
-.then(data=>{
-  const div = document.getElementById("list");
-  data.forEach(b=>{
-    div.innerHTML += `
-      <p>
-        ${b.name} - ${b.city}
-        <button onclick="approve('${b._id}')">✔</button>
-        <button onclick="reject('${b._id}')">✖</button>
-      </p>
-    `;
-  });
-});
+  <h2>Add Business (As Admin)</h2>
+  <form id="addBusinessForm" enctype="multipart/form-data">
+    <input type="text" id="title" placeholder="Business Title" required><br>
+    <input type="text" id="category" placeholder="Category" required><br>
+    <input type="text" id="city" placeholder="City" required><br>
+    <input type="text" id="area" placeholder="Area"><br>
+    <input type="text" id="phone" placeholder="Phone"><br>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="text" id="website" placeholder="Website"><br>
+    <textarea id="description" placeholder="Description"></textarea><br>
 
-function approve(id){
-  fetch(`/api/admin/approve/${id}`,{
-    method:"PUT",
-    headers:{ "Authorization":token }
-  }).then(()=>location.reload());
-}
+    <label>Images (max 5)</label>
+    <input type="file" id="images" name="images" accept="image/*" multiple><br>
 
-function reject(id){
-  fetch(`/api/admin/reject/${id}`,{
-    method:"PUT",
-    headers:{ "Authorization":token }
-  }).then(()=>location.reload());
-}
-</script>
+    <label><input type="checkbox" id="featured"> Featured</label>
+    <label><input type="checkbox" id="verified"> Verified</label><br>
+
+    <button type="submit">Add Business</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <script src="../js/config.js"></script>
+  <script>
+    const form = document.getElementById("addBusinessForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem("token"); // admin token
+
+      if (!token) {
+        msg.innerText = "Please login as admin first.";
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("title", document.getElementById("title").value);
+      fd.append("category", document.getElementById("category").value);
+      fd.append("city", document.getElementById("city").value);
+      fd.append("area", document.getElementById("area").value);
+      fd.append("phone", document.getElementById("phone").value);
+      fd.append("email", document.getElementById("email").value);
+      fd.append("website", document.getElementById("website").value);
+      fd.append("description", document.getElementById("description").value);
+      fd.append("featured", document.getElementById("featured").checked);
+      fd.append("verified", document.getElementById("verified").checked);
+
+      const files = document.getElementById("images").files;
+      for (let i = 0; i < files.length; i++) {
+        fd.append("images", files[i]);
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/admin/business/add`, {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + token
+            // NOTE: Do NOT set Content-Type when sending FormData; browser sets it.
+          },
+          body: fd
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = "green";
+          msg.innerText = "Business added successfully";
+          form.reset();
+        } else {
+          msg.style.color = "red";
+          msg.innerText = data.msg || JSON.stringify(data);
+        }
+      } catch (err) {
+        msg.style.color = "red";
+        msg.innerText = err.message;
+      }
+    });
+  </script>
+</body>
+</html>
