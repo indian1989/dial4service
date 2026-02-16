@@ -19,3 +19,22 @@ router.post("/login", async(req,res)=>{
 });
 
 module.exports = router;
+
+const express = require("express");
+const router = express.Router();
+const providerAuth = require("../middleware/providerAuth");
+
+// Provider dashboard
+router.get("/dashboard", providerAuth, (req, res) => {
+  res.json({
+    msg: "Provider Dashboard",
+    providerId: req.provider.id
+  });
+});
+
+// Provider add business
+router.post("/business/add", providerAuth, async (req, res) => {
+  res.json({ msg: "Business added by provider" });
+});
+
+module.exports = router;
