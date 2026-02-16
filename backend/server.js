@@ -178,6 +178,7 @@ const app = express();
 
 app.use(express.json());
 
+
 app.use("/api/admin", require("./routes/adminRoutes"));
 
 app.get("/", (req, res) => {
@@ -186,3 +187,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log("Server running on " + PORT));
+
+app.use("/api/provider", require("./routes/providerRoutes"));
+
