@@ -1,82 +1,227 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Add Business</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Add Business | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+  margin:0;
+}
+header{
+  background:#0a66c2;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+}
+.container{
+  max-width:900px;
+  margin:20px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:6px;
+}
+h2{margin-top:0}
+label{
+  display:block;
+  margin-top:12px;
+  font-weight:bold;
+}
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+textarea{resize:vertical}
+.row{
+  display:flex;
+  gap:10px;
+}
+.row > div{flex:1}
+button{
+  margin-top:20px;
+  padding:12px;
+  width:100%;
+  border:none;
+  background:#0a66c2;
+  color:#fff;
+  font-size:16px;
+  border-radius:4px;
+  cursor:pointer;
+}
+button:hover{background:#084c91}
+.preview{
+  background:#f0f8ff;
+  padding:15px;
+  margin-top:20px;
+  border-radius:5px;
+}
+#map{
+  width:100%;
+  height:250px;
+  margin-top:10px;
+}
+.note{
+  font-size:13px;
+  color:#555;
+}
+</style>
 </head>
-
-<header class="header">
-<h2>Add Your Business for Free</h2>
-
-<nav>
-<a href="index.html">Home</a>
-</nav>
-</header>
 
 <body>
 
-<section class="hero">
-<form id="business-form">
+<header>
+  <h1>Add Your Business</h1>
+</header>
 
-<input type="text" placeholder="Business Name" id="businessName" required><br><br>
-<input type="text" placeholder="Owner Name" id="ownerName" required><br><br>
-<input type="text" placeholder="Category" id="category" required><br><br>
-<input type="text" placeholder="City" id="city" required><br><br>
-<input type="text" placeholder="Email" id="email" required><br><br>
-<input type="text" placeholder="Phone" id="phone" required><br><br>
-<input type="text" placeholder="Description" id="description" required><br><br>
+<div class="container">
+<h2>Business Details</h2>
 
-<select id="serviceLocation">
-<option value="">-- Select State or UT --</option>
-<option value="andaman & nicobar">Andaman & Nicobar</option>
-<option value="andhra pradesh">Andhra Pradesh</option>
-<option value="arunachal pradesh">Arunachal Pradesh</option>
-<option value="assam">Assam</option>
-<option value="bihar">Bihar</option>
-<option value="chandigarh">Chandigarh</option>
-<option value="chhattisgarh">Chhattisgarh</option>
-<option value="dadra & nagar haveli & daman & diu">Dadra & Nagar Haveli & Daman & Diu</option>
-<option value="goa">Goa</option>
-<option value="gujarat">Gujarat</option>
-<option value="haryana">Haryana</option>
-<option value="himachal pradesh">Himachal Pradesh</option>
-<option value="jammu & kashmir">Jammu & Kashmir</option>
-<option value="jharkhand">Jharkhand</option>
-<option value="karnataka">Karnataka</option>
-<option value="kerala">Kerala</option>
-<option value="ladakh">Ladakh</option>
-<option value="lakshadweep">Lakshadweep</option>
-<option value="madhya pradesh">Madhya Pradesh</option>
-<option value="maharashtra">Maharashtra</option>
-<option value="manipur">Manipur</option>
-<option value="meghalaya">Meghalaya</option>
-<option value="mizoram">Mizoram</option>
-<option value="nagaland">Nagaland</option>
-<option value="odisha">Odisha</option>
-<option value="puducherry">Puducherry</option>
-<option value="punjab">Punjab</option>
-<option value="rajasthan">Rajasthan</option>
-<option value="sikkim">Sikkim</option>
-<option value="tamilnadi">Tamilnadu</option>
-<option value="tripura">Tripura</option>
-<option value="uttar pradesh">Uttar Pradesh</option>
-<option value="uttrakhand">Uttrakhand</option>
-<option value="west bengal">West Bengal</option>
+<form id="businessForm">
+
+<label>Business Name *</label>
+<input type="text" id="name" required>
+
+<label>Category *</label>
+<select id="category" required>
+  <option value="">Select Category</option>
+  <option>Plumber</option>
+  <option>Electrician</option>
+  <option>Doctor</option>
+  <option>Restaurant</option>
+  <option>Salon</option>
 </select>
 
-<input type="text" name="city" placeholder="City" required><br><br>
-<input type="text" name="district" placeholder="District" required><br><br>
-<input type="text" name="phone" placeholder="Phone" required><br><br>
-<textarea placeholder="Description"></textarea><br><br>
-<button type="submit">Submit</button>
+<div class="row">
+  <div>
+    <label>City *</label>
+    <input type="text" id="city" required>
+  </div>
+  <div>
+    <label>Pincode</label>
+    <input type="text" id="pincode">
+  </div>
+</div>
+
+<label>Full Address *</label>
+<textarea id="address" required></textarea>
+
+<div class="row">
+  <div>
+    <label>Phone *</label>
+    <input type="tel" id="phone" required>
+  </div>
+  <div>
+    <label>WhatsApp</label>
+    <input type="tel" id="whatsapp">
+  </div>
+</div>
+
+<label>Email</label>
+<input type="email" id="email">
+
+<label>Website</label>
+<input type="url" id="website">
+
+<label>Business Description</label>
+<textarea id="description"></textarea>
+
+<hr>
+
+<h2>Location</h2>
+<button type="button" onclick="getLocation()">📍 Use My Current Location</button>
+<p class="note">GPS allow karna zaroori hai</p>
+
+<input type="hidden" id="lat">
+<input type="hidden" id="lng">
+
+<div id="map"></div>
+
+<hr>
+
+<h2>Preview</h2>
+<div class="preview" id="previewBox">
+  Fill form to see preview
+</div>
+
+<button type="submit">Submit Business</button>
 
 </form>
-<p id="msg"></p>
-</section>
-<footer>
-	<p>     &copy;2026 Dail4Services. All Rights Reserved.</p>
-</footer>
-<script src="add-business.js"></script>
-<script src="script.js"></script>
+</div>
+
+<!-- GOOGLE MAP -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_KEY"></script>
+
+<script>
+let map, marker;
+
+function getLocation(){
+  if(!navigator.geolocation){
+    alert("GPS not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    document.getElementById("lat").value = lat;
+    document.getElementById("lng").value = lng;
+
+    showMap(lat,lng);
+  },()=>{
+    alert("Location permission denied");
+  });
+}
+
+function showMap(lat,lng){
+  map = new google.maps.Map(document.getElementById("map"),{
+    center:{lat:lat,lng:lng},
+    zoom:15
+  });
+
+  marker = new google.maps.Marker({
+    position:{lat:lat,lng:lng},
+    map:map,
+    draggable:true
+  });
+
+  marker.addListener("dragend",()=>{
+    const p = marker.getPosition();
+    document.getElementById("lat").value = p.lat();
+    document.getElementById("lng").value = p.lng();
+  });
+}
+
+/* LIVE PREVIEW */
+document.querySelectorAll("input,textarea,select")
+.forEach(el=>{
+  el.addEventListener("input",updatePreview);
+});
+
+function updatePreview(){
+  const html = `
+    <h3>${name.value || "Business Name"}</h3>
+    <p><strong>${category.value || "Category"}</strong> • ${city.value || "City"}</p>
+    <p>${address.value || ""}</p>
+    <p>📞 ${phone.value || ""}</p>
+    <p>${description.value || ""}</p>
+  `;
+  document.getElementById("previewBox").innerHTML = html;
+}
+
+/* FORM SUBMIT (FRONTEND ONLY) */
+document.getElementById("businessForm")
+.addEventListener("submit",e=>{
+  e.preventDefault();
+  alert("Frontend ready ✔️\nBackend API baad me connect hoga");
+});
+</script>
+
 </body>
 </html>
