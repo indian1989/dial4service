@@ -31,3 +31,27 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log("Dial4Service running on port " + PORT)
 );
+
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const app = express();
+
+// middleware
+app.use(express.json());
+
+// test route (IMPORTANT)
+app.get("/", (req, res) => {
+  res.send("Dial4Service backend running");
+});
+
+// PORT (MOST IMPORTANT LINE)
+const PORT = process.env.PORT || 5000;
+
+// server start
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
