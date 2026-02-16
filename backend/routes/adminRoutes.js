@@ -105,3 +105,26 @@ router.post(
 );
 
 module.exports = router;
+
+// ADMIN LOGIN
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) return res.status(401).json({ msg: "Admin not found" });
+
+    if (admin.password !== password)
+      return res.status(401).json({ msg: "Wrong password" });
+
+    const token = jwt.sign(
+      { id: admin._id, role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
