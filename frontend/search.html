@@ -1,108 +1,99 @@
-dail4service/
-   indx.php
-   serch.php
-   listing.php
-   add-business.php
-   config.php
-
-   admin/
-   	login.php
-   	dashboard.php
-  	approve.php
-  	logout.php
-
-   assets/
-	css/style.css
-	js/script.js
-
-   database.sql
-
-Create DATABASE Dail4Servise;
-
-USE DAIL4SRVICE
-
-CREATE TABLE business (
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   name VARCHAR(255), 
-   service VARCHAR(255),
-   city VARCHAR(100),
-   phone VARCHAR(100),
-   description TEXT,
-   status ENUM('pending' , 'approved') DEFAULT 'pending' ,
-   create at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE admin (
-   id INT AUTO_INCREMENT PRIMARY KEY ,
-   username VARCHAR(50) ,
-   password VARCHAR(255)
-);
-
-INSERT INTRO admin (username, password)
-VALUES ( 'admin' , MD5( 'admin123' ));
-
-
-<?php
-$conn = mysqli_connect("localhost" , "root" , "" , "Dail4Service");
-if(!$conn){die("Database Connecton Failed");}
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Dail4Service - Find Local Services</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<meta charset="UTF-8">
+<title>Search Results | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f4f4}
+a{text-decoration:none;color:#333}
+
+.header{
+ background:#0a66c2;color:#fff;padding:15px;text-align:center
+}
+
+.results{
+ padding:20px;
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+ gap:15px
+}
+
+.card{
+ background:#fff;padding:15px;border-radius:6px;
+ box-shadow:0 2px 5px rgba(0,0,0,0.1)
+}
+
+.card h3{margin:0;color:#0a66c2}
+.card small{color:#777}
+
+.rating{color:#ff9800;font-weight:bold}
+
+.call{
+ display:block;margin-top:10px;
+ background:#28a745;color:#fff;
+ text-align:center;padding:8px;border-radius:4px
+}
+
+.no-data{
+ text-align:center;padding:40px;font-size:18px;color:#777
+}
+</style>
 </head>
+
 <body>
 
-<h1>
-<
-<
-<
-<
-<
-<
-<
-<
-<
-<
-<
-<
+<div class="header">
+ <h2 id="title">Search Results</h2>
+</div>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Search Results</title>
-</head>
-<body>
-
-<h2>Search Results</h2>
-<div id="results"></div>
+<div class="results" id="resultBox">
+ Loading businesses...
+</div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+const API = "https://dial4service.onrender.com/api";
+
+const params = new URLSearchParams(location.search);
 const city = params.get("city");
 const category = params.get("category");
+const lat = params.get("lat");
+const lng = params.get("lng");
 
-fetch(`https://dial4service.onrender.com/api/business/search?city=${city}&category=${category}`)
+let url = API + "/business/search?";
+
+if(city) url += `city=${city}&`;
+if(category) url += `category=${category}&`;
+if(lat && lng) url += `lat=${lat}&lng=${lng}`;
+
+fetch(url)
 .then(res=>res.json())
 .then(data=>{
-  const div = document.getElementById("results");
-  data.forEach(b=>{
-    div.innerHTML += `
-      <h3>${b.name}</h3>
-      <p>${b.city} | ${b.category}</p>
-      <p>📞 ${b.phone}</p>
-      <hr>
-    `;
-  });
+ if(!data.length){
+  resultBox.innerHTML = `<div class="no-data">No businesses found</div>`;
+  return;
+ }
+
+ title.innerText =
+  (category ? category : "All Services") +
+  (city ? " in "+city : "");
+
+ let html="";
+ data.forEach(b=>{
+  html+=`
+   <div class="card">
+    <h3>${b.name}</h3>
+    <small>${b.category} • ${b.city}</small>
+    <p>${b.address || ""}</p>
+    <div class="rating">⭐ ${b.rating ? b.rating.toFixed(1) : "New"}</div>
+    <a class="call" href="tel:${b.phone}">📞 Call Now</a>
+   </div>
+  `;
+ });
+ resultBox.innerHTML = html;
 });
 </script>
 
 </body>
 </html>
-
-
-
-
