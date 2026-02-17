@@ -1,1 +1,233 @@
-add-business.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Business | Dial4Service Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f8;
+}
+.header{
+  background:#1f2937;
+  color:#fff;
+  padding:15px 25px;
+  font-size:20px;
+}
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+h2{
+  margin-bottom:20px;
+}
+.row{
+  display:flex;
+  gap:15px;
+  margin-bottom:15px;
+}
+.col{
+  flex:1;
+}
+label{
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+  font-weight:bold;
+}
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  font-size:14px;
+}
+textarea{resize:vertical}
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.preview{
+  margin-top:10px;
+}
+.preview img{
+  max-width:120px;
+  border-radius:4px;
+  margin-right:10px;
+}
+.btn{
+  padding:12px 20px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:15px;
+}
+.btn:hover{opacity:.9}
+.badge{
+  padding:4px 10px;
+  border-radius:15px;
+  font-size:12px;
+  background:#ffc107;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Admin Panel – Add Business</div>
+
+<div class="container">
+<h2>Add New Business</h2>
+
+<form id="businessForm">
+
+<!-- Business Info -->
+<div class="row">
+  <div class="col">
+    <label>Business Name</label>
+    <input type="text" required>
+  </div>
+  <div class="col">
+    <label>Provider (Owner Name)</label>
+    <input type="text" required>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label>Email</label>
+    <input type="email">
+  </div>
+  <div class="col">
+    <label>Phone</label>
+    <input type="tel">
+  </div>
+</div>
+
+<!-- Category / City -->
+<div class="row">
+  <div class="col">
+    <label>Category</label>
+    <select>
+      <option>Plumber</option>
+      <option>Electrician</option>
+      <option>Carpenter</option>
+    </select>
+  </div>
+  <div class="col">
+    <label>City</label>
+    <select>
+      <option>Delhi</option>
+      <option>Mumbai</option>
+      <option>Lucknow</option>
+    </select>
+  </div>
+</div>
+
+<!-- Address -->
+<div class="row">
+  <div class="col">
+    <label>Full Address</label>
+    <textarea rows="3"></textarea>
+  </div>
+</div>
+
+<!-- Timing -->
+<div class="row">
+  <div class="col">
+    <label>Opening Time</label>
+    <input type="time">
+  </div>
+  <div class="col">
+    <label>Closing Time</label>
+    <input type="time">
+  </div>
+</div>
+
+<div class="row">
+  <div class="checkbox">
+    <input type="checkbox" id="alwaysOpen">
+    <label for="alwaysOpen">24x7 Open</label>
+  </div>
+</div>
+
+<!-- Images -->
+<div class="row">
+  <div class="col">
+    <label>Business Photos</label>
+    <input type="file" multiple accept="image/*" onchange="previewImages(event)">
+    <div class="preview" id="preview"></div>
+  </div>
+</div>
+
+<!-- Paid Plan -->
+<div class="row">
+  <div class="col">
+    <label>Listing Plan</label>
+    <select>
+      <option>Free</option>
+      <option>Silver</option>
+      <option>Gold</option>
+      <option>Platinum</option>
+    </select>
+  </div>
+  <div class="col">
+    <label>Status</label>
+    <select>
+      <option>Approved</option>
+      <option>Pending</option>
+    </select>
+  </div>
+</div>
+
+<!-- Submit -->
+<div style="margin-top:20px">
+  <button class="btn" type="submit">Add Business</button>
+</div>
+
+</form>
+</div>
+
+<script>
+// 🔐 Admin Auth Guard
+if(!localStorage.getItem("adminToken")){
+  window.location.href="login.html";
+}
+
+// Image Preview
+function previewImages(event){
+  const preview = document.getElementById("preview");
+  preview.innerHTML = "";
+  [...event.target.files].forEach(file=>{
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+}
+
+// 24x7 toggle
+document.getElementById("alwaysOpen").addEventListener("change",function(){
+  document.querySelectorAll("input[type=time]").forEach(t=>{
+    t.disabled = this.checked;
+  });
+});
+
+// Submit (backend later)
+document.getElementById("businessForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  alert("Business added (frontend demo). Backend API later connect hoga.");
+});
+</script>
+
+</body>
+</html>
