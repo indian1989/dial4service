@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Plan Status | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
+}
+.container{
+  max-width:600px;
+  margin:40px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+.plan{
+  font-size:22px;
+  font-weight:bold;
+}
+.gold{color:#d4a017}
+.free{color:#6c757d}
+.alert{
+  background:#fff3cd;
+  padding:12px;
+  border-left:5px solid #ffc107;
+  margin:15px 0;
+}
+.expired{
+  background:#f8d7da;
+  border-left:5px solid #dc3545;
+}
+.btn{
+  padding:10px 16px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Current Plan Status</h2>
+
+  <div class="plan gold" id="planName">Gold Plan</div>
+  <p>Valid Till: <strong id="expiryDate">10 May 2026</strong></p>
+
+  <div class="alert" id="expiryAlert">
+    ⏳ Your plan will expire in <strong id="daysLeft"></strong> days.
+  </div>
+
+  <button class="btn" onclick="upgrade()">Upgrade / Renew Plan</button>
+</div>
+
+<script>
+// Dummy data (backend se aayega)
+let plan = {
+  name:"Gold",
+  expiry:"2026-05-10"
+};
+
+const today = new Date();
+const expiry = new Date(plan.expiry);
+const diffTime = expiry - today;
+const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+document.getElementById("daysLeft").innerText = days;
+
+if(days <= 0){
+  document.getElementById("planName").innerText = "Free Plan";
+  document.getElementById("planName").className = "plan free";
+  document.getElementById("expiryAlert").className = "alert expired";
+  document.getElementById("expiryAlert").innerHTML =
+    "❌ Your paid plan has expired. You are downgraded to FREE plan.";
+}
+
+function upgrade(){
+  window.location.href="purchase-plan.html";
+}
+</script>
+
+</body>
+</html>
