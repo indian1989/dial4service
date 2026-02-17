@@ -230,6 +230,9 @@ function goPage(p){
 /* Actions */
 function viewBiz(id){
   alert("View business ID: "+id);
+  location.href = "business-view.html?id=" + id;
+}
+
 }
 function editBiz(id){
   location.href = "edit-business.html?id="+id;
