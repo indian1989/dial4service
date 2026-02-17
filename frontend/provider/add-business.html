@@ -70,6 +70,37 @@ button:hover{background:#084c91}
   font-size:13px;
   color:#555;
 }
+
+  .photo-preview{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+.photo-box{
+  position:relative;
+}
+.photo-box img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+.remove-btn{
+  position:absolute;
+  top:4px;
+  right:4px;
+  background:red;
+  color:#fff;
+  border:none;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  cursor:pointer;
+  font-size:14px;
+}
+
 </style>
 </head>
 
@@ -231,9 +262,52 @@ document.getElementById("businessForm")
   e.preventDefault();
   alert("Frontend ready ✔️\nBackend API baad me connect hoga");
 });
+
+  <script>
+let selectedImages = [];
+
+document.getElementById("photos").addEventListener("change", function () {
+  const files = Array.from(this.files);
+
+  if (files.length + selectedImages.length > 5) {
+    alert("Maximum 5 photos allowed");
+    return;
+  }
+
+  files.forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+
+    selectedImages.push(file);
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      const div = document.createElement("div");
+      div.className = "photo-box";
+
+      div.innerHTML = `
+        <img src="${e.target.result}">
+        <button class="remove-btn">&times;</button>
+      `;
+
+      div.querySelector(".remove-btn").onclick = () => {
+        div.remove();
+        selectedImages = selectedImages.filter(f => f !== file);
+      };
+
+      document.getElementById("photoPreview").appendChild(div);
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+  this.value = "";
+});
+</script>
+
 </script>
 
 </body>
 </html>
+
 
 
