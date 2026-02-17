@@ -122,6 +122,52 @@ button:hover{background:#084c91}
   color:#666;
   font-size:14px;
 }
+.open24-wrapper{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:15px 0;
+  font-weight:500;
+}
+
+.switch{
+  position:relative;
+  width:50px;
+  height:24px;
+}
+
+.switch input{
+  display:none;
+}
+
+.slider{
+  position:absolute;
+  cursor:pointer;
+  background:#ccc;
+  border-radius:30px;
+  top:0; left:0; right:0; bottom:0;
+  transition:.3s;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  height:18px;
+  width:18px;
+  background:#fff;
+  left:3px;
+  bottom:3px;
+  border-radius:50%;
+  transition:.3s;
+}
+
+.switch input:checked + .slider{
+  background:#28a745;
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(26px);
+}
 
 
 </style>
@@ -205,7 +251,14 @@ button:hover{background:#084c91}
 
 <div id="photoPreview" class="photo-preview"></div>
 
-<hr>
+  <hr>
+  <div class="open24-wrapper">
+  <label class="switch">
+    <input type="checkbox" id="open24" onchange="toggle24x7(this)">
+    <span class="slider"></span>
+  </label>
+  <span class="open24-text">Open 24×7</span>
+</div>
 
 <h2>Business Timings</h2>
 <p class="note">Select opening & closing time for each day</p>
@@ -409,11 +462,59 @@ function toggleDay(checkbox){
     sel.disabled = !checkbox.checked;
   });
 }
+.open24-wrapper{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:15px 0;
+  font-weight:500;
+}
 
+.switch{
+  position:relative;
+  width:50px;
+  height:24px;
+}
+
+.switch input{
+  display:none;
+}
+
+.slider{
+  position:absolute;
+  cursor:pointer;
+  background:#ccc;
+  border-radius:30px;
+  top:0; left:0; right:0; bottom:0;
+  transition:.3s;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  height:18px;
+  width:18px;
+  background:#fff;
+  left:3px;
+  bottom:3px;
+  border-radius:50%;
+  transition:.3s;
+}
+
+.switch input:checked + .slider{
+  background:#28a745;
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(26px);
+}
+
+  
 </script>
 
 </body>
 </html>
+
 
 
 
