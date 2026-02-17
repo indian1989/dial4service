@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Users & Providers | Dial4Service Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+  margin:0;
+  background:#f4f6f8;
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:230px;
+  background:#1f2937;
+  color:#fff;
+  padding:20px;
+}
+.sidebar h2{margin-bottom:20px}
+.sidebar a{
+  display:block;
+  color:#ddd;
+  padding:10px;
+  text-decoration:none;
+  border-radius:4px;
+}
+.sidebar a:hover{background:#374151}
+
+/* Main */
+.main{
+  flex:1;
+  padding:20px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout{
+  background:red;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+/* Tabs */
+.tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
+.tab{
+  padding:8px 14px;
+  border-radius:4px;
+  cursor:pointer;
+  background:#ddd;
+}
+.tab.active{
+  background:#007bff;
+  color:#fff;
+}
+
+/* Table */
+.table-box{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+}
+th{background:#f1f1f1}
+.action-btn{
+  padding:5px 10px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.view{background:#007bff;color:#fff}
+.block{background:#dc3545;color:#fff}
+.unblock{background:#28a745;color:#fff}
+.status{
+  padding:4px 8px;
+  border-radius:12px;
+  font-size:12px;
+}
+.active{background:#28a745;color:#fff}
+.blocked{background:#999;color:#fff}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>Dial4Service</h2>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="approve-business.html">Business Approval</a>
+  <a href="categories.html">Categories</a>
+  <a href="#">Users & Providers</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <div class="header">
+    <h1>Users & Providers</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showUsers()">Users</div>
+    <div class="tab" onclick="showProviders()">Providers</div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-box">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Dummy User -->
+        <tr>
+          <td>Rahul Sharma</td>
+          <td>rahul@gmail.com</td>
+          <td>9876543210</td>
+          <td><span class="status active">Active</span></td>
+          <td>
+            <button class="action-btn view">View</button>
+            <button class="action-btn block">Block</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/* 🔐 Auth Guard */
+if(!localStorage.getItem("adminToken")){
+  window.location.href="login.html";
+}
+
+/* Tabs logic */
+const tabs = document.querySelectorAll(".tab");
+const tableBody = document.getElementById("tableBody");
+
+function setActiveTab(index){
+  tabs.forEach(t => t.classList.remove("active"));
+  tabs[index].classList.add("active");
+}
+
+/* Users */
+function showUsers(){
+  setActiveTab(0);
+  tableBody.innerHTML = `
+    <tr>
+      <td>Rahul Sharma</td>
+      <td>rahul@gmail.com</td>
+      <td>9876543210</td>
+      <td><span class="status active">Active</span></td>
+      <td>
+        <button class="action-btn view">View</button>
+        <button class="action-btn block">Block</button>
+      </td>
+    </tr>
+  `;
+}
+
+/* Providers */
+function showProviders(){
+  setActiveTab(1);
+  tableBody.innerHTML = `
+    <tr>
+      <td>ABC Electricals</td>
+      <td>abc@service.com</td>
+      <td>9123456789</td>
+      <td><span class="status blocked">Blocked</span></td>
+      <td>
+        <button class="action-btn view">View</button>
+        <button class="action-btn unblock">Unblock</button>
+      </td>
+    </tr>
+  `;
+}
+
+/* Logout */
+function logout(){
+  localStorage.clear();
+  window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>
