@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>All Businesses | Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f8;
+}
+.header{
+  background:#1f2937;
+  color:#fff;
+  padding:15px 25px;
+  font-size:20px;
+}
+.container{
+  padding:20px;
+}
+.filters{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+input,select{
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  font-size:14px;
+}
+
+.table-box{
+  background:#fff;
+  border-radius:8px;
+  overflow:auto;
+  box-shadow:0 0 10px rgba(0,0,0,.08);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1000px;
+}
+th,td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  font-size:14px;
+}
+th{
+  background:#f1f5f9;
+  font-weight:bold;
+}
+.status{
+  padding:4px 8px;
+  border-radius:4px;
+  font-size:12px;
+}
+.Approved{background:#d1fae5;color:#065f46}
+.Pending{background:#fef3c7;color:#92400e}
+.Blocked{background:#fee2e2;color:#991b1b}
+
+.actions button{
+  padding:5px 8px;
+  font-size:12px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.view{background:#0ea5e9;color:#fff}
+.edit{background:#22c55e;color:#fff}
+.delete{background:#ef4444;color:#fff}
+
+.pagination{
+  margin-top:15px;
+  display:flex;
+  gap:5px;
+}
+.pagination button{
+  padding:6px 12px;
+  border:1px solid #ccc;
+  background:#fff;
+  cursor:pointer;
+}
+.pagination button.active{
+  background:#0d6efd;
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Admin Panel – All Businesses</div>
+
+<div class="container">
+
+<!-- Filters -->
+<div class="filters">
+  <input type="text" id="searchInput" placeholder="Search name / phone">
+
+  <select id="cityFilter">
+    <option value="">All Cities</option>
+    <option>Delhi</option>
+    <option>Mumbai</option>
+    <option>Lucknow</option>
+  </select>
+
+  <select id="categoryFilter">
+    <option value="">All Categories</option>
+    <option>Plumber</option>
+    <option>Electrician</option>
+    <option>Carpenter</option>
+  </select>
+
+  <select id="planFilter">
+    <option value="">All Plans</option>
+    <option>Free</option>
+    <option>Silver</option>
+    <option>Gold</option>
+    <option>Platinum</option>
+  </select>
+
+  <select id="statusFilter">
+    <option value="">All Status</option>
+    <option>Approved</option>
+    <option>Pending</option>
+    <option>Blocked</option>
+  </select>
+</div>
+
+<!-- Table -->
+<div class="table-box">
+<table>
+<thead>
+<tr>
+  <th>#</th>
+  <th>Business</th>
+  <th>Owner</th>
+  <th>Phone</th>
+  <th>Category</th>
+  <th>City</th>
+  <th>Plan</th>
+  <th>Status</th>
+  <th>Actions</th>
+</tr>
+</thead>
+<tbody id="businessTable"></tbody>
+</table>
+</div>
+
+<!-- Pagination -->
+<div class="pagination" id="pagination"></div>
+
+</div>
+
+<script>
+// 🔐 Admin Guard
+if(!localStorage.getItem("adminToken")){
+  location.href="login.html";
+}
+
+/* Dummy Data (backend se aayega) */
+const businesses = [
+ {id:1,name:"Rahmat Plumbing",owner:"Rahmat",phone:"9876543210",cat:"Plumber",city:"Delhi",plan:"Gold",status:"Approved"},
+ {id:2,name:"Star Electric",owner:"Aman",phone:"9999999999",cat:"Electrician",city:"Mumbai",plan:"Free",status:"Pending"},
+ {id:3,name:"Wood Craft",owner:"Imran",phone:"8888888888",cat:"Carpenter",city:"Lucknow",plan:"Silver",status:"Blocked"},
+ {id:4,name:"Quick Plumber",owner:"Ravi",phone:"7777777777",cat:"Plumber",city:"Delhi",plan:"Platinum",status:"Approved"}
+];
+
+const rowsPerPage = 5;
+let currentPage = 1;
+
+function renderTable(){
+  const tbody = document.getElementById("businessTable");
+  tbody.innerHTML = "";
+
+  let filtered = businesses.filter(b=>{
+    return (
+      (!searchInput.value || b.name.toLowerCase().includes(searchInput.value.toLowerCase()) || b.phone.includes(searchInput.value)) &&
+      (!cityFilter.value || b.city === cityFilter.value) &&
+      (!categoryFilter.value || b.cat === categoryFilter.value) &&
+      (!planFilter.value || b.plan === planFilter.value) &&
+      (!statusFilter.value || b.status === statusFilter.value)
+    );
+  });
+
+  const start = (currentPage-1)*rowsPerPage;
+  const pageData = filtered.slice(start,start+rowsPerPage);
+
+  pageData.forEach((b,i)=>{
+    tbody.innerHTML += `
+    <tr>
+      <td>${start+i+1}</td>
+      <td>${b.name}</td>
+      <td>${b.owner}</td>
+      <td>${b.phone}</td>
+      <td>${b.cat}</td>
+      <td>${b.city}</td>
+      <td>${b.plan}</td>
+      <td><span class="status ${b.status}">${b.status}</span></td>
+      <td class="actions">
+        <button class="view" onclick="viewBiz(${b.id})">View</button>
+        <button class="edit" onclick="editBiz(${b.id})">Edit</button>
+        <button class="delete" onclick="deleteBiz(${b.id})">Delete</button>
+      </td>
+    </tr>`;
+  });
+
+  renderPagination(filtered.length);
+}
+
+function renderPagination(total){
+  const pages = Math.ceil(total / rowsPerPage);
+  const box = document.getElementById("pagination");
+  box.innerHTML = "";
+  for(let i=1;i<=pages;i++){
+    box.innerHTML += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+}
+
+function goPage(p){
+  currentPage = p;
+  renderTable();
+}
+
+/* Actions */
+function viewBiz(id){
+  alert("View business ID: "+id);
+}
+function editBiz(id){
+  location.href = "edit-business.html?id="+id;
+}
+function deleteBiz(id){
+  if(confirm("Delete this business?")){
+    alert("Business deleted (frontend demo)");
+  }
+}
+
+/* Filters */
+["searchInput","cityFilter","categoryFilter","planFilter","statusFilter"]
+.forEach(id=>{
+  document.getElementById(id).addEventListener("input",()=>{
+    currentPage=1;
+    renderTable();
+  });
+});
+
+renderTable();
+</script>
+
+</body>
+</html>
