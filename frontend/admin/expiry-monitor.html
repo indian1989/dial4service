@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Expired Plans | Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+}
+.container{
+  padding:25px;
+}
+table{
+  width:100%;
+  background:#fff;
+  border-collapse:collapse;
+}
+th,td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+th{
+  background:#f1f1f1;
+}
+.expired{
+  color:red;
+  font-weight:bold;
+}
+.btn{
+  padding:6px 10px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Expired Paid Listings</h2>
+
+  <table>
+    <tr>
+      <th>Business</th>
+      <th>Provider</th>
+      <th>Old Plan</th>
+      <th>Expired On</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+
+    <tr>
+      <td>Rahmat Plumbing</td>
+      <td>Rahmat Services</td>
+      <td>Gold</td>
+      <td>10 Feb 2026</td>
+      <td class="expired">Downgraded</td>
+      <td><button class="btn">Extend</button></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>
