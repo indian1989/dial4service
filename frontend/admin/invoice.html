@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Invoice | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f8;
+}
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:#fff;
+  padding:25px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:2px solid #000;
+  padding-bottom:15px;
+}
+.logo{
+  font-size:24px;
+  font-weight:bold;
+}
+.invoice-title{
+  text-align:right;
+}
+.section{
+  margin-top:20px;
+}
+.section h3{
+  margin-bottom:8px;
+  font-size:16px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:10px;
+  font-size:14px;
+}
+th{
+  background:#f1f1f1;
+}
+.total{
+  text-align:right;
+  font-weight:bold;
+}
+.footer{
+  margin-top:25px;
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+}
+.btn{
+  padding:10px 16px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  background:#007bff;
+  color:#fff;
+}
+.btn.print{
+  background:#198754;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="invoice">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      Dial4Service<br>
+      <small>India's Local Services Platform</small>
+    </div>
+    <div class="invoice-title">
+      <strong>GST INVOICE</strong><br>
+      Invoice No: <span id="invoiceNo">INV-1023</span><br>
+      Date: <span id="invoiceDate">10-02-2026</span>
+    </div>
+  </div>
+
+  <!-- Seller -->
+  <div class="section">
+    <h3>Seller Details</h3>
+    <p>
+      Dial4Service Pvt Ltd<br>
+      GSTIN: 09ABCDE1234F1Z5<br>
+      Address: New Delhi, India
+    </p>
+  </div>
+
+  <!-- Buyer -->
+  <div class="section">
+    <h3>Buyer (Service Provider)</h3>
+    <p>
+      Rahmat Services<br>
+      GSTIN: 09XYZDE9876K1Z2<br>
+      Email: rahmat@service.com<br>
+      Phone: 9876543210
+    </p>
+  </div>
+
+  <!-- Table -->
+  <div class="section">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th>Duration</th>
+          <th>Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Gold Paid Listing</td>
+          <td>3 Months</td>
+          <td>5997</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tax -->
+  <div class="section">
+    <table>
+      <tr>
+        <td class="total">Subtotal</td>
+        <td>₹5997</td>
+      </tr>
+      <tr>
+        <td class="total">GST (18%)</td>
+        <td>₹1079</td>
+      </tr>
+      <tr>
+        <td class="total">Grand Total</td>
+        <td>₹7076</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div>
+      <strong>Payment Mode:</strong> Online<br>
+      <strong>Status:</strong> Paid
+    </div>
+    <div>
+      <button class="btn print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
