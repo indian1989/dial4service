@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Near Me Services | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f8}
+.header{
+  padding:15px;
+  background:#0d6efd;
+  color:#fff;
+  font-size:20px;
+}
+.container{padding:15px}
+#map{
+  height:300px;
+  width:100%;
+  margin-bottom:15px;
+}
+.card{
+  background:#fff;
+  padding:15px;
+  border-radius:6px;
+  margin-bottom:10px;
+  box-shadow:0 0 6px rgba(0,0,0,.1);
+}
+.badge{
+  padding:3px 8px;
+  border-radius:12px;
+  font-size:12px;
+  background:#ffc107;
+}
+.btn{
+  background:#0d6efd;
+  color:#fff;
+  padding:6px 10px;
+  border:none;
+  border-radius:4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Services Near You</div>
+
+<div class="container">
+
+  <div id="map"></div>
+
+  <div id="results"></div>
+
+</div>
+
+<script>
+let userLat, userLng;
+
+// Step 1: Get User Location
+navigator.geolocation.getCurrentPosition(pos=>{
+  userLat = pos.coords.latitude;
+  userLng = pos.coords.longitude;
+
+  initMap();
+  loadBusinesses();
+});
+
+// Dummy businesses (backend se aayega)
+const businesses = [
+  {name:"Rahmat Plumbing", lat:28.6139, lng:77.2090, rating:4.8, plan:"Gold"},
+  {name:"A1 Electrical", lat:28.6200, lng:77.2100, rating:4.3, plan:"Free"}
+];
+
+// Distance calculator
+function getDistance(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const dLat = (lat2-lat1)*Math.PI/180;
+  const dLon = (lon2-lon1)*Math.PI/180;
+  const a =
+    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// Load businesses
+function loadBusinesses(){
+  const container = document.getElementById("results");
+  container.innerHTML = "";
+
+  businesses.forEach(b=>{
+    let dist = getDistance(userLat,userLng,b.lat,b.lng).toFixed(1);
+
+    container.innerHTML += `
+      <div class="card">
+        <strong>${b.name}</strong>
+        <span class="badge">${b.plan}</span><br>
+        ⭐ ${b.rating} | 📍 ${dist} km away<br><br>
+        <button class="btn">Call Now</button>
+      </div>
+    `;
+  });
+}
+
+// Google Map
+function initMap(){
+  const map = new google.maps.Map(document.getElementById("map"),{
+    center:{lat:userLat,lng:userLng},
+    zoom:13
+  });
+
+  new google.maps.Marker({
+    position:{lat:userLat,lng:userLng},
+    map,
+    label:"You"
+  });
+
+  businesses.forEach(b=>{
+    new google.maps.Marker({
+      position:{lat:b.lat,lng:b.lng},
+      map,
+      title:b.name
+    });
+  });
+}
+</script>
+
+<!-- Google Maps Script -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+
+</body>
+</html>
