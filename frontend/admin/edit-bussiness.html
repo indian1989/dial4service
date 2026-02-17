@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Edit Business | Dial4Service Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f8;
+}
+.header{
+  background:#1f2937;
+  color:#fff;
+  padding:15px 25px;
+  font-size:20px;
+}
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+h2{margin-bottom:20px}
+
+.row{
+  display:flex;
+  gap:15px;
+  margin-bottom:15px;
+}
+.col{flex:1}
+
+label{
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+  font-weight:bold;
+}
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  font-size:14px;
+}
+textarea{resize:vertical}
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+.preview{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.image-box{
+  position:relative;
+}
+.image-box img{
+  width:120px;
+  height:80px;
+  object-fit:cover;
+  border-radius:4px;
+}
+.remove{
+  position:absolute;
+  top:3px;
+  right:3px;
+  background:red;
+  color:#fff;
+  border:none;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  cursor:pointer;
+}
+
+.btn{
+  padding:12px 20px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:15px;
+}
+.btn.danger{
+  background:#dc3545;
+}
+.btn.secondary{
+  background:#6c757d;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Admin Panel – Edit Business</div>
+
+<div class="container">
+<h2>Edit Business</h2>
+
+<form id="editBusinessForm">
+
+<!-- Business Info -->
+<div class="row">
+  <div class="col">
+    <label>Business Name</label>
+    <input type="text" id="businessName">
+  </div>
+  <div class="col">
+    <label>Provider Name</label>
+    <input type="text" id="providerName">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label>Email</label>
+    <input type="email" id="email">
+  </div>
+  <div class="col">
+    <label>Phone</label>
+    <input type="tel" id="phone">
+  </div>
+</div>
+
+<!-- Category / City -->
+<div class="row">
+  <div class="col">
+    <label>Category</label>
+    <select id="category">
+      <option>Plumber</option>
+      <option>Electrician</option>
+      <option>Carpenter</option>
+    </select>
+  </div>
+  <div class="col">
+    <label>City</label>
+    <select id="city">
+      <option>Delhi</option>
+      <option>Mumbai</option>
+      <option>Lucknow</option>
+    </select>
+  </div>
+</div>
+
+<!-- Address -->
+<div class="row">
+  <div class="col">
+    <label>Full Address</label>
+    <textarea rows="3" id="address"></textarea>
+  </div>
+</div>
+
+<!-- Timing -->
+<div class="row">
+  <div class="col">
+    <label>Opening Time</label>
+    <input type="time" id="openTime">
+  </div>
+  <div class="col">
+    <label>Closing Time</label>
+    <input type="time" id="closeTime">
+  </div>
+</div>
+
+<div class="checkbox">
+  <input type="checkbox" id="alwaysOpen">
+  <label for="alwaysOpen">24x7 Open</label>
+</div>
+
+<!-- Existing Images -->
+<label>Existing Images</label>
+<div class="preview" id="existingImages"></div>
+
+<!-- Add New Images -->
+<div class="row">
+  <div class="col">
+    <label>Add More Images</label>
+    <input type="file" multiple accept="image/*" onchange="addImages(event)">
+  </div>
+</div>
+
+<!-- Plan & Status -->
+<div class="row">
+  <div class="col">
+    <label>Listing Plan</label>
+    <select id="plan">
+      <option>Free</option>
+      <option>Silver</option>
+      <option>Gold</option>
+      <option>Platinum</option>
+    </select>
+  </div>
+  <div class="col">
+    <label>Status</label>
+    <select id="status">
+      <option>Approved</option>
+      <option>Pending</option>
+      <option>Blocked</option>
+    </select>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div style="margin-top:20px;display:flex;gap:10px">
+  <button class="btn" type="submit">Update Business</button>
+  <button type="button" class="btn secondary" onclick="history.back()">Cancel</button>
+  <button type="button" class="btn danger" onclick="deleteBusiness()">Delete</button>
+</div>
+
+</form>
+</div>
+
+<script>
+// 🔐 Admin Auth Guard
+if(!localStorage.getItem("adminToken")){
+  window.location.href="login.html";
+}
+
+/* Dummy existing business (backend se aayega by ID) */
+const business = {
+  name:"Rahmat Plumbing",
+  provider:"Rahmat Services",
+  email:"rahmat@service.com",
+  phone:"9876543210",
+  category:"Plumber",
+  city:"Delhi",
+  address:"Delhi NCR, India",
+  open:"09:00",
+  close:"18:00",
+  alwaysOpen:false,
+  plan:"Gold",
+  status:"Approved",
+  images:[
+    "https://via.placeholder.com/120x80",
+    "https://via.placeholder.com/120x80"
+  ]
+};
+
+/* Prefill */
+businessName.value = business.name;
+providerName.value = business.provider;
+email.value = business.email;
+phone.value = business.phone;
+category.value = business.category;
+city.value = business.city;
+address.value = business.address;
+openTime.value = business.open;
+closeTime.value = business.close;
+alwaysOpen.checked = business.alwaysOpen;
+plan.value = business.plan;
+status.value = business.status;
+
+/* Images */
+const imageBox = document.getElementById("existingImages");
+business.images.forEach((src,i)=>{
+  imageBox.innerHTML += `
+    <div class="image-box">
+      <img src="${src}">
+      <button class="remove" onclick="removeImage(${i})">×</button>
+    </div>`;
+});
+
+function removeImage(index){
+  alert("Image removed (frontend demo)");
+}
+
+/* 24x7 toggle */
+alwaysOpen.addEventListener("change",function(){
+  openTime.disabled = this.checked;
+  closeTime.disabled = this.checked;
+});
+
+/* Add new images */
+function addImages(e){
+  [...e.target.files].forEach(file=>{
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.style.width="120px";
+    img.style.height="80px";
+    img.style.borderRadius="4px";
+    imageBox.appendChild(img);
+  });
+}
+
+/* Submit */
+editBusinessForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  alert("Business updated (frontend only). Backend API later connect hoga.");
+});
+
+/* Delete */
+function deleteBusiness(){
+  if(confirm("Are you sure you want to delete this business?")){
+    alert("Business deleted (frontend demo)");
+  }
+}
+</script>
+
+</body>
+</html>
