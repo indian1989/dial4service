@@ -1,1 +1,202 @@
-approve-business.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Business Approval | Dial4Service Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+  margin:0;
+  background:#f4f6f8;
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:220px;
+  background:#1f2937;
+  color:#fff;
+  padding:20px;
+}
+.sidebar h2{margin-bottom:20px}
+.sidebar a{
+  display:block;
+  color:#ddd;
+  padding:10px;
+  text-decoration:none;
+  border-radius:4px;
+}
+.sidebar a:hover{background:#374151}
+
+/* Main */
+.main{
+  flex:1;
+  padding:20px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout{
+  background:red;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+/* Table */
+.table-box{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+}
+th{background:#f1f1f1}
+.action-btn{
+  padding:6px 10px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.approve{background:#28a745;color:#fff}
+.reject{background:#dc3545;color:#fff}
+.view{background:#007bff;color:#fff}
+
+/* Modal */
+.modal{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.modal-box{
+  background:#fff;
+  width:400px;
+  padding:20px;
+  border-radius:8px;
+}
+.modal-box h3{margin-bottom:10px}
+.modal-box p{font-size:14px;margin-bottom:6px}
+.close{
+  text-align:right;
+  cursor:pointer;
+  color:red;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>Dial4Service</h2>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="#">Pending Businesses</a>
+  <a href="#">All Businesses</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <div class="header">
+    <h1>Pending Business Approval</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="table-box">
+    <table>
+      <thead>
+        <tr>
+          <th>Business</th>
+          <th>Category</th>
+          <th>City</th>
+          <th>Owner</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="businessTable">
+        <!-- Dummy row -->
+        <tr>
+          <td>ABC Electricals</td>
+          <td>Electrician</td>
+          <td>Delhi</td>
+          <td>Ramesh</td>
+          <td>
+            <button class="action-btn view" onclick="viewBusiness()">View</button>
+            <button class="action-btn approve" onclick="approve()">Approve</button>
+            <button class="action-btn reject" onclick="reject()">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="close" onclick="closeModal()">✖</div>
+    <h3>Business Details</h3>
+    <p><b>Name:</b> ABC Electricals</p>
+    <p><b>Category:</b> Electrician</p>
+    <p><b>City:</b> Delhi</p>
+    <p><b>Phone:</b> 9876543210</p>
+    <p><b>Timings:</b> 9 AM – 6 PM</p>
+  </div>
+</div>
+
+<script>
+/* 🔐 Auth Guard */
+if(!localStorage.getItem("adminToken")){
+  window.location.href="login.html";
+}
+
+/* Modal */
+function viewBusiness(){
+  document.getElementById("modal").style.display="flex";
+}
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+
+/* Approve / Reject (backend later) */
+function approve(){
+  alert("Business Approved (API later)");
+}
+function reject(){
+  const reason = prompt("Enter rejection reason");
+  if(reason){
+    alert("Business Rejected: " + reason);
+  }
+}
+
+/* Logout */
+function logout(){
+  localStorage.clear();
+  window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>
