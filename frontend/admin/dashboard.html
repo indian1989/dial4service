@@ -1,90 +1,216 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Dashboard - Add Business</title>
-  <link rel="stylesheet" href="../css/admin.css">
+<meta charset="UTF-8">
+<title>Admin Dashboard | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+
+body{
+  display:flex;
+  min-height:100vh;
+  background:#f4f6f8;
+}
+
+/* Sidebar */
+.sidebar{
+  width:230px;
+  background:#1f2937;
+  color:#fff;
+  padding:20px;
+}
+.sidebar h2{
+  margin-bottom:20px;
+  font-size:20px;
+}
+.sidebar a{
+  display:block;
+  color:#ddd;
+  text-decoration:none;
+  padding:10px;
+  margin-bottom:5px;
+  border-radius:4px;
+}
+.sidebar a:hover{
+  background:#374151;
+}
+
+/* Main */
+.main{
+  flex:1;
+  padding:20px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.header h1{
+  font-size:22px;
+}
+.logout{
+  background:red;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+.card h3{
+  font-size:16px;
+  color:#555;
+}
+.card p{
+  font-size:28px;
+  margin-top:10px;
+  color:#111;
+}
+
+/* Table */
+.table-box{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+th{
+  background:#f1f1f1;
+}
+.action-btn{
+  padding:5px 10px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.approve{background:#28a745;color:#fff}
+.reject{background:#dc3545;color:#fff}
+</style>
 </head>
+
 <body>
-  <h1>Admin Dashboard</h1>
 
-  <h2>Add Business (As Admin)</h2>
-  <form id="addBusinessForm" enctype="multipart/form-data">
-    <input type="text" id="title" placeholder="Business Title" required><br>
-    <input type="text" id="category" placeholder="Category" required><br>
-    <input type="text" id="city" placeholder="City" required><br>
-    <input type="text" id="area" placeholder="Area"><br>
-    <input type="text" id="phone" placeholder="Phone"><br>
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="text" id="website" placeholder="Website"><br>
-    <textarea id="description" placeholder="Description"></textarea><br>
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>Dial4Service</h2>
+  <a href="#">Dashboard</a>
+  <a href="#">Pending Businesses</a>
+  <a href="#">All Businesses</a>
+  <a href="#">Categories</a>
+  <a href="#">Providers</a>
+  <a href="#">Users</a>
+  <a href="#">Payments</a>
+</div>
 
-    <label>Images (max 5)</label>
-    <input type="file" id="images" name="images" accept="image/*" multiple><br>
+<!-- Main Content -->
+<div class="main">
 
-    <label><input type="checkbox" id="featured"> Featured</label>
-    <label><input type="checkbox" id="verified"> Verified</label><br>
+  <div class="header">
+    <h1>Welcome, <span id="adminName">Admin</span></h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
 
-    <button type="submit">Add Business</button>
-  </form>
+  <!-- Stats Cards -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Businesses</h3>
+      <p id="totalBusinesses">0</p>
+    </div>
+    <div class="card">
+      <h3>Pending Approval</h3>
+      <p id="pendingBusinesses">0</p>
+    </div>
+    <div class="card">
+      <h3>Total Providers</h3>
+      <p id="totalProviders">0</p>
+    </div>
+    <div class="card">
+      <h3>Total Users</h3>
+      <p id="totalUsers">0</p>
+    </div>
+  </div>
 
-  <p id="msg"></p>
+  <!-- Pending Businesses -->
+  <div class="table-box">
+    <h3>Pending Business Approval</h3>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th>Business Name</th>
+          <th>Category</th>
+          <th>City</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="pendingTable">
+        <!-- Dynamic rows later -->
+        <tr>
+          <td>Sample Business</td>
+          <td>Electrician</td>
+          <td>Delhi</td>
+          <td>
+            <button class="action-btn approve">Approve</button>
+            <button class="action-btn reject">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <script src="../js/config.js"></script>
-  <script>
-    const form = document.getElementById("addBusinessForm");
-    const msg = document.getElementById("msg");
+</div>
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const token = localStorage.getItem("token"); // admin token
+<script>
+/* 🔐 Auth Guard */
+const token = localStorage.getItem("adminToken");
+if(!token){
+  window.location.href="login.html";
+}
 
-      if (!token) {
-        msg.innerText = "Please login as admin first.";
-        return;
-      }
+/* Admin Name */
+document.getElementById("adminName").innerText =
+  localStorage.getItem("adminName") || "Admin";
 
-      const fd = new FormData();
-      fd.append("title", document.getElementById("title").value);
-      fd.append("category", document.getElementById("category").value);
-      fd.append("city", document.getElementById("city").value);
-      fd.append("area", document.getElementById("area").value);
-      fd.append("phone", document.getElementById("phone").value);
-      fd.append("email", document.getElementById("email").value);
-      fd.append("website", document.getElementById("website").value);
-      fd.append("description", document.getElementById("description").value);
-      fd.append("featured", document.getElementById("featured").checked);
-      fd.append("verified", document.getElementById("verified").checked);
+/* Dummy Stats (replace by backend later) */
+document.getElementById("totalBusinesses").innerText = 120;
+document.getElementById("pendingBusinesses").innerText = 8;
+document.getElementById("totalProviders").innerText = 45;
+document.getElementById("totalUsers").innerText = 560;
 
-      const files = document.getElementById("images").files;
-      for (let i = 0; i < files.length; i++) {
-        fd.append("images", files[i]);
-      }
+/* Logout */
+function logout(){
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("adminName");
+  window.location.href="login.html";
+}
+</script>
 
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/admin/business/add`, {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + token
-            // NOTE: Do NOT set Content-Type when sending FormData; browser sets it.
-          },
-          body: fd
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-          msg.style.color = "green";
-          msg.innerText = "Business added successfully";
-          form.reset();
-        } else {
-          msg.style.color = "red";
-          msg.innerText = data.msg || JSON.stringify(data);
-        }
-      } catch (err) {
-        msg.style.color = "red";
-        msg.innerText = err.message;
-      }
-    });
-  </script>
 </body>
 </html>
