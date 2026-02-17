@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payment History | Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f8;
+}
+
+/* Header */
+.header{
+  background:#212529;
+  color:#fff;
+  padding:15px 25px;
+  font-size:20px;
+  font-weight:bold;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* Container */
+.container{
+  padding:25px;
+}
+
+/* Table */
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  box-shadow:0 0 10px rgba(0,0,0,.08);
+}
+th,td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+  font-size:14px;
+}
+th{
+  background:#f1f1f1;
+}
+tr:hover{
+  background:#fafafa;
+}
+
+/* Status */
+.status{
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+.paid{ background:#d1e7dd; color:#0f5132; }
+.failed{ background:#f8d7da; color:#842029; }
+.refund{ background:#cff4fc; color:#055160; }
+
+/* Plan badge */
+.plan{
+  padding:4px 10px;
+  border-radius:15px;
+  font-size:12px;
+  color:#fff;
+}
+.free{background:#6c757d}
+.silver{background:#adb5bd}
+.gold{background:#ffc107;color:#000}
+.platinum{background:#0d6efd}
+
+/* Buttons */
+.btn{
+  padding:6px 12px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:13px;
+}
+.invoice{
+  background:#198754;
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div>Dial4Service – Payment History</div>
+  <div id="providerName">Rahmat Services</div>
+</div>
+
+<div class="container">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Plan</th>
+        <th>Amount</th>
+        <th>Payment Status</th>
+        <th>Validity</th>
+        <th>Invoice</th>
+      </tr>
+    </thead>
+    <tbody id="paymentTable">
+      <!-- Dynamic rows -->
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+/* 🔐 Provider Auth Guard */
+if(!localStorage.getItem("providerToken")){
+  window.location.href="login.html";
+}
+
+/* Dummy Data (Backend se aayega) */
+const payments = [
+  {
+    date:"10 Feb 2026",
+    plan:"Gold",
+    amount:7076,
+    status:"Paid",
+    start:"10 Feb 2026",
+    end:"10 May 2026"
+  },
+  {
+    date:"05 Jan 2026",
+    plan:"Silver",
+    amount:1179,
+    status:"Paid",
+    start:"05 Jan 2026",
+    end:"05 Feb 2026"
+  },
+  {
+    date:"01 Dec 2025",
+    plan:"Free",
+    amount:0,
+    status:"Paid",
+    start:"01 Dec 2025",
+    end:"Unlimited"
+  }
+];
+
+const table = document.getElementById("paymentTable");
+
+payments.forEach(p=>{
+  let statusClass = p.status.toLowerCase();
+  let planClass = p.plan.toLowerCase();
+
+  table.innerHTML += `
+    <tr>
+      <td>${p.date}</td>
+      <td><span class="plan ${planClass}">${p.plan}</span></td>
+      <td>₹${p.amount}</td>
+      <td><span class="status ${statusClass}">${p.status}</span></td>
+      <td>${p.start} – ${p.end}</td>
+      <td>
+        ${p.amount > 0 
+          ? `<button class="btn invoice" onclick="viewInvoice()">View</button>`
+          : '-'}
+      </td>
+    </tr>
+  `;
+});
+
+function viewInvoice(){
+  window.location.href="invoice.html";
+}
+</script>
+
+</body>
+</html>
