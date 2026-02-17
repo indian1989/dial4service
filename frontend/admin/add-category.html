@@ -1,1 +1,206 @@
-add-category.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manage Categories | Dial4Service Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+  margin:0;
+  background:#f4f6f8;
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:220px;
+  background:#1f2937;
+  color:#fff;
+  padding:20px;
+}
+.sidebar h2{margin-bottom:20px}
+.sidebar a{
+  display:block;
+  color:#ddd;
+  padding:10px;
+  text-decoration:none;
+  border-radius:4px;
+}
+.sidebar a:hover{background:#374151}
+
+/* Main */
+.main{
+  flex:1;
+  padding:20px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout{
+  background:red;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+/* Form */
+.form-box{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  margin-bottom:25px;
+}
+.form-box h3{margin-bottom:15px}
+input,select{
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+button{
+  padding:8px 14px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.add-btn{background:#28a745;color:#fff}
+
+/* Table */
+.table-box{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+th{background:#f1f1f1}
+.action-btn{
+  padding:5px 10px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.edit{background:#007bff;color:#fff}
+.delete{background:#dc3545;color:#fff}
+.status{
+  padding:4px 8px;
+  border-radius:12px;
+  font-size:12px;
+}
+.active{background:#28a745;color:#fff}
+.inactive{background:#999;color:#fff}
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>Dial4Service</h2>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="approve-business.html">Business Approval</a>
+  <a href="#">Categories</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <div class="header">
+    <h1>Manage Categories</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Add Category -->
+  <div class="form-box">
+    <h3>Add New Category</h3>
+
+    <input type="text" id="catName" placeholder="Category Name">
+    <input type="text" id="catIcon" placeholder="Icon class (eg: fa fa-wrench)">
+    <input type="file" id="catImage">
+
+    <select id="catStatus">
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+
+    <button class="add-btn" onclick="addCategory()">Add Category</button>
+  </div>
+
+  <!-- Category List -->
+  <div class="table-box">
+    <h3>All Categories</h3><br>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Icon</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="categoryTable">
+        <!-- Dummy row -->
+        <tr>
+          <td>Electrician</td>
+          <td>🔧</td>
+          <td><span class="status active">Active</span></td>
+          <td>
+            <button class="action-btn edit" onclick="editCategory()">Edit</button>
+            <button class="action-btn delete" onclick="deleteCategory()">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/* 🔐 Auth Guard */
+if(!localStorage.getItem("adminToken")){
+  window.location.href="login.html";
+}
+
+/* Dummy functions – backend later */
+function addCategory(){
+  alert("Category added (API later)");
+}
+function editCategory(){
+  alert("Edit category (API later)");
+}
+function deleteCategory(){
+  if(confirm("Delete this category?")){
+    alert("Category deleted (API later)");
+  }
+}
+
+/* Logout */
+function logout(){
+  localStorage.clear();
+  window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>
