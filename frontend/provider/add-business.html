@@ -101,6 +101,29 @@ button:hover{background:#084c91}
   font-size:14px;
 }
 
+  .timing-wrapper{
+  margin-top:10px;
+}
+.day-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+  flex-wrap:wrap;
+}
+.day-row label{
+  width:120px;
+  font-weight:500;
+}
+.day-row select{
+  padding:6px;
+}
+.note{
+  color:#666;
+  font-size:14px;
+}
+
+
 </style>
 </head>
 
@@ -182,6 +205,82 @@ button:hover{background:#084c91}
 
 <div id="photoPreview" class="photo-preview"></div>
 
+<hr>
+
+<h2>Business Timings</h2>
+<p class="note">Select opening & closing time for each day</p>
+
+<div class="timing-wrapper">
+
+  <!-- Repeatable Day Block -->
+  <div class="day-row">
+    <label>
+      <input type="checkbox" checked onchange="toggleDay(this)"> Monday
+    </label>
+
+    <select class="time">
+      <option value="">Open</option>
+      <option>06:00 AM</option><option>07:00 AM</option><option>08:00 AM</option>
+      <option>09:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+      <option>12:00 PM</option><option>01:00 PM</option><option>02:00 PM</option>
+      <option>03:00 PM</option><option>04:00 PM</option><option>05:00 PM</option>
+    </select>
+
+    <span>to</span>
+
+    <select class="time">
+      <option value="">Close</option>
+      <option>12:00 PM</option><option>01:00 PM</option><option>02:00 PM</option>
+      <option>03:00 PM</option><option>04:00 PM</option><option>05:00 PM</option>
+      <option>06:00 PM</option><option>07:00 PM</option><option>08:00 PM</option>
+      <option>09:00 PM</option><option>10:00 PM</option><option>11:00 PM</option>
+    </select>
+  </div>
+
+  <!-- Copy same block for other days -->
+  <div class="day-row">
+    <label><input type="checkbox" checked onchange="toggleDay(this)"> Tuesday</label>
+    <select class="time"><option>09:00 AM</option></select>
+    <span>to</span>
+    <select class="time"><option>06:00 PM</option></select>
+  </div>
+
+  <div class="day-row">
+    <label><input type="checkbox" checked onchange="toggleDay(this)"> Wednesday</label>
+    <select class="time"><option>09:00 AM</option></select>
+    <span>to</span>
+    <select class="time"><option>06:00 PM</option></select>
+  </div>
+
+  <div class="day-row">
+    <label><input type="checkbox" checked onchange="toggleDay(this)"> Thursday</label>
+    <select class="time"><option>09:00 AM</option></select>
+    <span>to</span>
+    <select class="time"><option>06:00 PM</option></select>
+  </div>
+
+  <div class="day-row">
+    <label><input type="checkbox" checked onchange="toggleDay(this)"> Friday</label>
+    <select class="time"><option>09:00 AM</option></select>
+    <span>to</span>
+    <select class="time"><option>06:00 PM</option></select>
+  </div>
+
+  <div class="day-row">
+    <label><input type="checkbox" checked onchange="toggleDay(this)"> Saturday</label>
+    <select class="time"><option>10:00 AM</option></select>
+    <span>to</span>
+    <select class="time"><option>04:00 PM</option></select>
+  </div>
+
+  <div class="day-row">
+    <label><input type="checkbox" onchange="toggleDay(this)"> Sunday (Closed)</label>
+    <select class="time" disabled></select>
+    <span>to</span>
+    <select class="time" disabled></select>
+  </div>
+
+</div>
 
 <hr>
 
@@ -263,7 +362,6 @@ document.getElementById("businessForm")
   alert("Frontend ready ✔️\nBackend API baad me connect hoga");
 });
 
-  <script>
 let selectedImages = [];
 
 document.getElementById("photos").addEventListener("change", function () {
@@ -302,12 +400,21 @@ document.getElementById("photos").addEventListener("change", function () {
 
   this.value = "";
 });
-</script>
+
+function toggleDay(checkbox){
+  const row = checkbox.closest(".day-row");
+  const selects = row.querySelectorAll("select");
+
+  selects.forEach(sel => {
+    sel.disabled = !checkbox.checked;
+  });
+}
 
 </script>
 
 </body>
 </html>
+
 
 
 
