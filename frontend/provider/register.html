@@ -1,1 +1,89 @@
-register.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Provider Register | Dial4service</title>
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+.container{max-width:420px;margin:60px auto;background:#fff;padding:25px;border-radius:6px}
+h2{text-align:center}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#0a7cff;color:#fff;border:none;cursor:pointer}
+button:hover{background:#055fc4}
+.small{text-align:center;font-size:14px}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Service Provider Registration</h2>
+
+<form id="providerRegisterForm">
+
+  <input type="text" id="name" placeholder="Full Name" required>
+
+  <input type="email" id="email" placeholder="Email Address" required>
+
+  <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" required>
+
+  <input type="password" id="password" placeholder="Password" required>
+
+  <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+
+  <button type="submit">Create Account</button>
+
+</form>
+
+<p class="small">
+Already registered? <a href="login.html">Login here</a>
+</p>
+
+</div>
+
+<script>
+// Provider Registration Script (Frontend Only)
+
+document.getElementById("providerRegisterForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  if(password.value !== confirmPassword.value){
+    alert("Password & Confirm Password do not match");
+    return;
+  }
+
+  const providerData = {
+    name: name.value,
+    email: email.value,
+    mobile: mobile.value,
+    password: password.value,
+    role: "provider",
+    status: "pending",
+    createdAt: new Date().toISOString()
+  };
+
+  console.log("Provider Register Data (send to backend):", providerData);
+
+  /*
+  fetch('/api/provider/register', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(providerData)
+  })
+  .then(res => res.json())
+  .then(data => {
+     if(data.success){
+       window.location.href = "login.html";
+     }
+  })
+  */
+
+  alert("Registration successful (frontend only)");
+  this.reset();
+});
+</script>
+
+</body>
+</html>
