@@ -1,1 +1,132 @@
-add-city.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add City | Admin Panel</title>
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+.container { max-width: 1100px; margin: auto; }
+form { background:#fff; padding:20px; border-radius:6px; }
+input, select, button { padding:10px; margin:6px 0; width:100%; }
+table { width:100%; border-collapse: collapse; margin-top:20px; }
+table th, table td { border:1px solid #ddd; padding:10px; text-align:left; }
+table th { background:#f4f4f4; }
+.action-btn { margin-right:5px; cursor:pointer; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>➕ Add City</h2>
+
+<form id="cityForm">
+  <input type="hidden" id="cityId">
+
+  <label>City Name</label>
+  <input type="text" id="cityName" placeholder="Enter city name" required>
+
+  <label>State</label>
+  <input type="text" id="stateName" placeholder="Enter state name" required>
+
+  <label>Status</label>
+  <select id="cityStatus">
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+
+  <button type="submit">Save City</button>
+</form>
+
+<hr>
+
+<h3>📍 City List</h3>
+
+<table>
+<thead>
+<tr>
+  <th>#</th>
+  <th>City</th>
+  <th>State</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
+</thead>
+
+<tbody id="cityTable">
+<tr>
+  <td>1</td>
+  <td>Delhi</td>
+  <td>Delhi</td>
+  <td>Active</td>
+  <td>
+    <button class="action-btn" onclick="editCity('1','Delhi','Delhi','active')">Edit</button>
+    <button class="action-btn" onclick="deleteCity('1')">Delete</button>
+  </td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<script>
+// Auto slug generator (future use)
+function generateSlug(text){
+  return text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+}
+
+// Submit City Form
+document.getElementById("cityForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const cityData = {
+    id: cityId.value,
+    cityName: cityName.value,
+    state: stateName.value,
+    slug: generateSlug(cityName.value),
+    status: cityStatus.value
+  };
+
+  console.log("City Data (send to backend):", cityData);
+
+  /*
+  fetch('/api/admin/add-city', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(cityData)
+  })
+  */
+
+  alert("City saved (frontend only)");
+  this.reset();
+});
+
+// Edit City
+function editCity(id, city, state, status){
+  cityId.value = id;
+  cityName.value = city;
+  stateName.value = state;
+  cityStatus.value = status;
+  window.scrollTo(0,0);
+}
+
+// Delete City
+function deleteCity(id){
+  if(confirm("Are you sure to delete this city?")){
+    console.log("Delete city id:", id);
+
+    /*
+    fetch('/api/admin/delete-city/'+id,{
+      method:'DELETE'
+    })
+    */
+
+    alert("City deleted (frontend only)");
+  }
+}
+</script>
+
+</body>
+</html>
