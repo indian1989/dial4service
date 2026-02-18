@@ -1,29 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Business Listings</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Business Listing | Dial4service</title>
+<meta name="description" content="Business details, contact, reviews and enquiry">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.container{max-width:1100px;margin:auto;padding:20px}
+.header{display:flex;gap:20px}
+.header img{width:220px;height:160px;object-fit:cover;border-radius:6px}
+.info h1{margin:0}
+.badge{background:#28a745;color:#fff;padding:4px 8px;border-radius:4px;font-size:13px}
+.actions button{margin-right:8px;padding:8px 14px;cursor:pointer}
+.section{margin-top:25px}
+.gallery img{width:120px;height:90px;margin:5px;border-radius:4px;object-fit:cover}
+.ad{margin:25px 0;padding:10px;background:#fff3cd;text-align:center}
+form input,form textarea,form button{width:100%;padding:10px;margin:8px 0}
+.map{height:250px;background:#eee;display:flex;align-items:center;justify-content:center}
+</style>
 </head>
+
 <body>
 
-<header>
-<h1>All Businesses</h1>
+<div class="container">
 
-<nav>
-<a href="index.html">Home</a>
-</nav.
-</header>
+<!-- 🔝 BUSINESS HEADER -->
+<div class="header">
+  <img id="mainImage" src="assets/images/sample.jpg" alt="Business Image">
 
-<section class="hero">
-<h3>Available Businesses</h3>
-<ul>
-<li><b>Expert Electricals</b>Electrician</li>
-</ul>
-</section>
+  <div class="info">
+    <h1 id="businessName">ABC Electrician</h1>
+    <p>
+      <span id="category">Electrician</span>,
+      <span id="city">Delhi</span>
+    </p>
+    <span class="badge" id="rating">4.5 ★</span>
+
+    <div class="actions">
+      <button onclick="callNow()">📞 Call</button>
+      <button onclick="whatsappNow()">💬 WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📢 FEATURED AD -->
+<div class="ad">
+  <strong>Sponsored:</strong> Promote your business here
+</div>
+
+<!-- 🖼️ GALLERY -->
+<div class="section">
+<h3>Photos</h3>
+<div class="gallery" id="gallery">
+  <img src="assets/images/sample.jpg">
+  <img src="assets/images/sample.jpg">
+</div>
+</div>
+
+<!-- ℹ️ DETAILS -->
+<div class="section">
+<h3>Business Information</h3>
+<p id="description">
+Professional electrician providing home and office services.
+</p>
+
+<p><strong>Address:</strong> <span id="address">Delhi, India</span></p>
+<p><strong>Timing:</strong> <span id="timing">9:00 AM – 9:00 PM</span></p>
+</div>
+
+<!-- 🗺️ MAP -->
+<div class="section">
+<h3>Location</h3>
+<div class="map">Google Map will load here</div>
+</div>
+
+<!-- ✉️ ENQUIRY FORM -->
+<div class="section">
+<h3>Send Enquiry</h3>
+
+<form id="enquiryForm">
+  <input type="text" id="name" placeholder="Your Name" required>
+  <input type="tel" id="mobile" placeholder="Mobile Number" required>
+  <textarea id="message" placeholder="Your enquiry" required></textarea>
+  <button type="submit">Submit Enquiry</button>
+</form>
+</div>
+
+</div>
+
+<script>
+// ===== CALL / WHATSAPP =====
+function callNow(){
+  window.location.href = "tel:+919999999999";
+}
+
+function whatsappNow(){
+  window.open("https://wa.me/919999999999");
+}
+
+// ===== ENQUIRY SUBMIT =====
+document.getElementById("enquiryForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const enquiryData = {
+    businessId: "BUSINESS_ID",
+    name: name.value,
+    mobile: mobile.value,
+    message: message.value,
+    createdAt: new Date().toISOString()
+  };
+
+  console.log("Enquiry Data (send to backend):", enquiryData);
+
+  /*
+  fetch('/api/enquiry/send', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(enquiryData)
+  })
+  */
+
+  alert("Enquiry sent (frontend only)");
+  this.reset();
+});
+
+// ===== BUSINESS DATA LOAD (Future) =====
+/*
+fetch('/api/business/:slug')
+.then(res => res.json())
+.then(data => {
+  businessName.innerText = data.name;
+  category.innerText = data.category;
+  city.innerText = data.city;
+  rating.innerText = data.rating + " ★";
+});
+*/
+</script>
 
 <footer>
 	<p>     &copy;2026 Dail4Services. All Rights Reserved.</p>
 </footer>
 <script src="script.js"></script>
 </body>
+
 </html>
