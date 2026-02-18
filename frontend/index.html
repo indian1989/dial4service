@@ -53,15 +53,48 @@ a{text-decoration:none;color:#333}
 .ad-banner img{width:100%;height:220px;object-fit:cover}
 
 .section{background:#fff;margin:15px;padding:20px}
-.categories{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
- gap:15px
+
+.popular-categories{
+  padding:30px 0;
 }
-.category{
- text-align:center;padding:10px;background:#fafafa;border-radius:5px;
- cursor:pointer
+
+.popular-categories h2{
+  margin-bottom:20px;
 }
-.category img{width:60px;height:60px}
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:18px;
+}
+
+.category-card{
+  background:#fff;
+  border-radius:8px;
+  text-align:center;
+  padding:15px 10px;
+  text-decoration:none;
+  color:#333;
+  transition:0.25s;
+}
+
+.category-card:hover{
+  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  transform:translateY(-4px);
+}
+
+.category-card img{
+  width:42px;
+  height:42px;
+  margin-bottom:8px;
+  filter:invert(34%) sepia(92%) saturate(1350%) hue-rotate(197deg);
+}
+
+.category-card span{
+  display:block;
+  font-size:14px;
+  font-weight:500;
+}
 
 footer{
  background:#222;color:#fff;padding:20px;text-align:center
@@ -118,10 +151,39 @@ footer a{color:#ccc}
 </div>
 
 <!-- POPULAR CATEGORIES -->
-<div class="section">
+<section class="popular-categories">
   <h2>Popular Categories</h2>
-  <div class="categories" id="categoryList"></div>
-</div>
+
+  <div class="category-grid" id="popularCategories">
+
+    <a href="category.html?slug=electrician" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/bolt.svg" alt="Electrician">
+      <span>Electrician</span>
+    </a>
+
+    <a href="category.html?slug=plumber" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/wrench.svg" alt="Plumber">
+      <span>Plumber</span>
+    </a>
+
+    <a href="category.html?slug=salon" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/scissors.svg" alt="Salon">
+      <span>Salon</span>
+    </a>
+
+    <a href="category.html?slug=ac-repair" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/snowflake.svg" alt="AC Repair">
+      <span>AC Repair</span>
+    </a>
+
+    <a href="category.html?slug=carpenter" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/home-modern.svg" alt="Carpenter">
+      <span>Carpenter</span>
+    </a>
+
+  </div>
+</section>
+
 
 <!-- FOOTER -->
 <footer>
@@ -247,11 +309,35 @@ function nearMe(){
     }
   );
 }
+
+ // popular categories
+ 
+/*
+const categories = [
+ {name:"Electrician", slug:"electrician", icon:"bolt"},
+ {name:"Plumber", slug:"plumber", icon:"wrench"},
+ {name:"Salon", slug:"salon", icon:"scissors"}
+];
+
+const box = document.getElementById("popularCategories");
+box.innerHTML = "";
+
+categories.forEach(cat=>{
+  box.innerHTML += `
+    <a href="category.html?slug=${cat.slug}" class="category-card">
+      <img src="https://unpkg.com/@heroicons/outline@2.0.18/${cat.icon}.svg">
+      <span>${cat.name}</span>
+    </a>
+  `;
+});
+*/
+
 </script>
 
 
 </body>
 </html>
+
 
 
 
