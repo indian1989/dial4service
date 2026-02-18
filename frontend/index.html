@@ -28,6 +28,25 @@ a{text-decoration:none;color:#333}
  background:#ffcc00;border:none;font-weight:bold;cursor:pointer
 }
 
+ .search-box{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+#nearMeBtn{
+  background:#28a745;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+#nearMeBtn:hover{
+  background:#1e7e34;
+}
+
 .ad-banner{
  margin:15px;background:#fff;padding:10px;text-align:center
 }
@@ -79,6 +98,18 @@ footer a{color:#ccc}
   <select id="searchCity"></select>
   <select id="searchCategory"></select>
   <button onclick="search()">Search</button>
+ <div class="search-box">
+ </div>
+
+  <input type="text" id="searchKeyword" placeholder="Search for services">
+
+  <button id="searchBtn">Search</button>
+
+  <!-- 📍 Search Near Me -->
+  <button id="nearMeBtn" title="Search near your location">
+    📍 Near Me
+  </button>
+
 </div>
 
 <!-- AD BANNER -->
@@ -153,6 +184,40 @@ function goCategory(cat){
  location.href=`search.html?category=${cat}`;
 }
 
+// Normal Search
+document.getElementById("searchBtn").addEventListener("click", function(){
+  const keyword = searchKeyword.value.trim();
+  if(!keyword){
+    alert("Please enter search keyword");
+    return;
+  }
+  window.location.href = "search.html?q=" + encodeURIComponent(keyword);
+});
+
+// 📍 Search Near Me
+document.getElementById("nearMeBtn").addEventListener("click", function(){
+
+  if(!navigator.geolocation){
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(position){
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // Redirect with location
+      window.location.href =
+        `search-near-me.html?lat=${lat}&lng=${lng}`;
+    },
+    function(){
+      alert("Location permission denied");
+    }
+  );
+
+});
+
 /* LOCATION */
 function detectLocation(){
  if(navigator.geolocation){
@@ -187,5 +252,6 @@ function nearMe(){
 
 </body>
 </html>
+
 
 
