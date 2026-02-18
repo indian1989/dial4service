@@ -1,1 +1,90 @@
-login.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Provider Login | Dial4service</title>
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+.container{max-width:400px;margin:70px auto;background:#fff;padding:25px;border-radius:6px}
+h2{text-align:center}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#0a7cff;color:#fff;border:none;cursor:pointer}
+button:hover{background:#055fc4}
+.remember{display:flex;align-items:center;font-size:14px}
+.remember input{width:auto;margin-right:6px}
+.small{text-align:center;font-size:14px}
+.error{color:red;font-size:14px;text-align:center}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Service Provider Login</h2>
+
+<form id="providerLoginForm">
+
+  <input type="text" id="loginId" placeholder="Email or Mobile Number" required>
+
+  <input type="password" id="password" placeholder="Password" required>
+
+  <div class="remember">
+    <input type="checkbox" id="rememberMe">
+    <label for="rememberMe">Remember Me</label>
+  </div>
+
+  <button type="submit">Login</button>
+
+  <p class="error" id="errorMsg"></p>
+
+</form>
+
+<p class="small">
+New Provider? <a href="register.html">Register here</a>
+</p>
+
+</div>
+
+<script>
+// Provider Login Script (Frontend Only)
+
+document.getElementById("providerLoginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  errorMsg.innerText = "";
+
+  const loginData = {
+    loginId: loginId.value,
+    password: password.value,
+    role: "provider",
+    remember: rememberMe.checked
+  };
+
+  console.log("Provider Login Data (send to backend):", loginData);
+
+  /*
+  fetch('/api/provider/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(loginData)
+  })
+  .then(res => res.json())
+  .then(data => {
+     if(data.success){
+       localStorage.setItem("providerToken", data.token);
+       window.location.href = "dashboard.html";
+     } else {
+       errorMsg.innerText = data.message;
+     }
+  })
+  */
+
+  // Demo success
+  localStorage.setItem("providerToken", "demo-token");
+  window.location.href = "dashboard.html";
+});
+</script>
+
+</body>
+</html>
