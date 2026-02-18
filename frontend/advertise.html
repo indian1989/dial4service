@@ -1,1 +1,120 @@
-advertise.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advertise With Us | Dial4service</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.container{max-width:700px;margin:40px auto;background:#fff;padding:25px;border-radius:6px}
+h2{text-align:center;margin-bottom:20px}
+input,select,button,textarea{width:100%;padding:10px;margin:8px 0}
+button{background:#ff9800;color:#fff;border:none;cursor:pointer}
+button:hover{background:#e68900}
+.preview{margin-top:10px}
+.preview img{max-width:100%;height:auto;border:1px solid #ddd;padding:5px}
+.note{font-size:14px;color:#555}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📢 Advertise With Dial4service</h2>
+
+<form id="advertiseForm" enctype="multipart/form-data">
+
+  <label>Who are you?</label>
+  <select id="accountType" required>
+    <option value="">Select</option>
+    <option value="user">User</option>
+    <option value="provider">Service Provider</option>
+  </select>
+
+  <label>Advertisement Title</label>
+  <input type="text" id="adTitle" placeholder="Eg: Best AC Repair in Delhi" required>
+
+  <label>Banner Image</label>
+  <input type="file" id="bannerImage" accept="image/*" required>
+  <div class="preview" id="imagePreview"></div>
+
+  <label>Redirect Link (optional)</label>
+  <input type="url" id="redirectUrl" placeholder="https://example.com">
+
+  <label>Banner Placement</label>
+  <select id="placement" required>
+    <option value="">Select Position</option>
+    <option value="home">Home Page</option>
+    <option value="category">Category Page</option>
+    <option value="search">Search Page</option>
+    <option value="city">City Page</option>
+  </select>
+
+  <label>Start Date</label>
+  <input type="date" id="startDate" required>
+
+  <label>End Date</label>
+  <input type="date" id="endDate" required>
+
+  <button type="submit">Submit Advertisement</button>
+
+</form>
+
+<p class="note">
+✔ Ads will be live after admin approval.<br>
+✔ Payment will be required before activation.
+</p>
+
+</div>
+
+<script>
+// Banner preview
+document.getElementById("bannerImage").addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    imagePreview.innerHTML = `<img src="${e.target.result}">`;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Submit Advertisement
+document.getElementById("advertiseForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const adData = new FormData();
+  adData.append("accountType", accountType.value);
+  adData.append("title", adTitle.value);
+  adData.append("banner", bannerImage.files[0]);
+  adData.append("redirectUrl", redirectUrl.value);
+  adData.append("placement", placement.value);
+  adData.append("startDate", startDate.value);
+  adData.append("endDate", endDate.value);
+  adData.append("status", "pending");
+
+  console.log("Advertisement data ready for backend");
+
+  /*
+  fetch('/api/advertise/create', {
+    method: 'POST',
+    body: adData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success){
+      window.location.href = "payment.html";
+    }
+  })
+  */
+
+  alert("Advertisement submitted (frontend only)");
+  this.reset();
+  imagePreview.innerHTML = "";
+});
+</script>
+
+</body>
+</html>
