@@ -18,16 +18,6 @@ a{text-decoration:none;color:#333}
 .logo small{font-size:12px;color:#555}
 .menu a{margin-left:15px;font-weight:bold}
 
-.search-header{
- background:#0a66c2;padding:15px;display:flex;gap:10px;justify-content:center
-}
-.search-header select,.search-header button{
- padding:10px;width:180px
-}
-.search-header button{
- background:#ffcc00;border:none;font-weight:bold;cursor:pointer
-}
-
  .search-box{
   display:flex;
   gap:8px;
@@ -124,16 +114,8 @@ footer a{color:#ccc}
     <a href="provider/login.html">Add Business</a>
     <a href="#">Advertisement</a>
   </div>
-</div>
 
 <!-- SEARCH BAR -->
-<div class="search-header">
-  <select id="searchCity"></select>
-  <select id="searchCategory"></select>
-  <button onclick="search()">Search</button>
- <div class="search-box">
- </div>
-
   <input type="text" id="searchKeyword" placeholder="Search for services">
 
   <button id="searchBtn">Search</button>
@@ -337,6 +319,7 @@ categories.forEach(cat=>{
 
 </body>
 </html>
+
 
 
 
