@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Dashboard - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  font-family: Arial;
+  margin:0;
+  background:#f4f6f9;
+}
+header{
+  background:#003366;
+  color:white;
+  padding:15px;
+}
+.container{
+  padding:20px;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Welcome User Dashboard</h2>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h3>Your Account Overview</h3>
+    <p>Name: <span id="userName">Loading...</span></p>
+    <p>Email: <span id="userEmail">Loading...</span></p>
+  </div>
+</div>
+
+<script>
+// Later connect with backend
+document.getElementById("userName").innerText = "User Name";
+document.getElementById("userEmail").innerText = "user@email.com";
+</script>
+
+</body>
+</html>
