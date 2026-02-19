@@ -1,3 +1,5 @@
 PORT=5000
-mongodb+srv://admin:hk64JbmW2K6ygADI@dial4servicecluster.cohqurb.mongodb.net/?appName=Dial4ServiceCluster
-JWT_SECRET=DIAL4SERVICE_SECRET
+MONGO_URI=mongodb://127.0.0.1:27017/dial4service
+JWT_SECRET=supersecretkey
+JWT_EXPIRE=7d
+
