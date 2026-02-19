@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload Gallery - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f4f6f9;
+}
+
+header{
+  background:#003366;
+  color:white;
+  padding:15px 20px;
+}
+
+.container{
+  max-width:1000px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input[type="file"]{
+  margin:15px 0;
+}
+
+.preview-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.preview-item{
+  position:relative;
+}
+
+.preview-item img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:6px;
+}
+
+.remove-btn{
+  position:absolute;
+  top:5px;
+  right:5px;
+  background:red;
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:25px;
+  height:25px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+button.upload-btn{
+  background:#003366;
+  color:white;
+  padding:10px 20px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+button.upload-btn:hover{
+  background:#0055aa;
+}
+
+.message{
+  margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>Upload Business Gallery</h2>
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <label>Select Images (Multiple Allowed)</label>
+    <input type="file" id="galleryInput" multiple accept="image/*">
+
+    <div class="preview-grid" id="previewContainer"></div>
+
+    <button class="upload-btn" onclick="uploadImages()">Upload Images</button>
+
+    <p class="message" id="uploadMessage"></p>
+
+  </div>
+</div>
+
+<script>
+
+const galleryInput = document.getElementById("galleryInput");
+const previewContainer = document.getElementById("previewContainer");
+
+let selectedFiles = [];
+
+galleryInput.addEventListener("change", function(){
+  selectedFiles = Array.from(this.files);
+  previewContainer.innerHTML = "";
+
+  selectedFiles.forEach((file, index)=>{
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const div = document.createElement("div");
+      div.classList.add("preview-item");
+
+      div.innerHTML = `
+        <img src="${e.target.result}">
+        <button class="remove-btn" onclick="removeImage(${index})">×</button>
+      `;
+
+      previewContainer.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function removeImage(index){
+  selectedFiles.splice(index,1);
+  galleryInput.value = "";
+  previewContainer.innerHTML = "";
+  selectedFiles.forEach((file)=>{
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const div = document.createElement("div");
+      div.classList.add("preview-item");
+      div.innerHTML = `<img src="${e.target.result}">`;
+      previewContainer.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function uploadImages(){
+  if(selectedFiles.length === 0){
+    document.getElementById("uploadMessage").innerHTML = "Please select images first.";
+    return;
+  }
+
+  document.getElementById("uploadMessage").innerHTML =
+  "Images Uploaded (Backend Connect Later)";
+}
+
+/*
+
+Future Backend API:
+
+POST /api/provider/upload-gallery
+FormData:
+  - businessId
+  - images[]
+
+Recommended Backend:
+- multer (file upload)
+- Cloudinary (optional)
+- store image URLs in businesses collection
+
+*/
+</script>
+
+</body>
+</html>
