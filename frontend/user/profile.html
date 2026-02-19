@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Profile - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f4f6f9;
+}
+
+header{
+  background:#003366;
+  color:white;
+  padding:15px 20px;
+}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  margin-bottom:25px;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+h3{
+  margin-top:0;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0 15px 0;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+
+button{
+  background:#003366;
+  color:white;
+  padding:10px 20px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#0055aa;
+}
+
+.success{
+  color:green;
+}
+
+.error{
+  color:red;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>User Profile</h2>
+</header>
+
+<div class="container">
+
+  <!-- Profile Update Section -->
+  <div class="card">
+    <h3>Update Profile</h3>
+
+    <form id="profileForm">
+
+      <label>Full Name</label>
+      <input type="text" id="fullName" required>
+
+      <label>Email</label>
+      <input type="email" id="email" required>
+
+      <label>Mobile Number</label>
+      <input type="text" id="mobile">
+
+      <button type="submit">Update Profile</button>
+
+      <p id="profileMessage"></p>
+
+    </form>
+  </div>
+
+  <!-- Change Password Section -->
+  <div class="card">
+    <h3>Change Password</h3>
+
+    <form id="passwordForm">
+
+      <label>Current Password</label>
+      <input type="password" id="currentPassword" required>
+
+      <label>New Password</label>
+      <input type="password" id="newPassword" required>
+
+      <label>Confirm New Password</label>
+      <input type="password" id="confirmPassword" required>
+
+      <button type="submit">Change Password</button>
+
+      <p id="passwordMessage"></p>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+// Later backend se user data fetch hoga
+document.getElementById("fullName").value = "User Name";
+document.getElementById("email").value = "user@email.com";
+document.getElementById("mobile").value = "9876543210";
+
+// Profile Update
+document.getElementById("profileForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  document.getElementById("profileMessage").innerHTML =
+  "<span class='success'>Profile Updated (Backend Connect Later)</span>";
+});
+
+// Password Change
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let newPass = document.getElementById("newPassword").value;
+  let confirmPass = document.getElementById("confirmPassword").value;
+
+  if(newPass !== confirmPass){
+    document.getElementById("passwordMessage").innerHTML =
+    "<span class='error'>Passwords do not match</span>";
+  } else {
+    document.getElementById("passwordMessage").innerHTML =
+    "<span class='success'>Password Changed (Backend Connect Later)</span>";
+  }
+});
+</script>
+
+</body>
+</html>
