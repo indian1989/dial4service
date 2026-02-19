@@ -1,44 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  createCity,
-  getAllCities,
-  getCityBySlug,
-  updateCity,
-  deleteCity
-} = require("../controllers/cityController");
-
+const cityController = require("../controllers/cityController");
 const { protect } = require("../middleware/authMiddleware");
 const { authorize } = require("../middleware/roleMiddleware");
 
 /*
 ====================================
-PUBLIC ROUTES
+PUBLIC
 ====================================
 */
 
-// Get all cities
-router.get("/", getAllCities);
-
-// Get single city by slug
-router.get("/:slug", getCityBySlug);
-
+router.get("/", cityController.getAllCities);
+router.get("/:slug", cityController.getCityBySlug);
 
 /*
 ====================================
-ADMIN ROUTES
+ADMIN ONLY
 ====================================
 */
 
-// Create city
-router.post("/", protect, authorize("admin"), createCity);
-
-// Update city
-router.put("/:id", protect, authorize("admin"), updateCity);
-
-// Delete city
-router.delete("/:id", protect, authorize("admin"), deleteCity);
-
+router.post("/", protect, authorize("admin"), cityController.createCity);
+router.put("/:id", protect, authorize("admin"), cityController.updateCity);
+router.delete("/:id", protect, authorize("admin"), cityController.deleteCity);
 
 module.exports = router;
