@@ -1,24 +1,37 @@
-const router = require("express").Router();
-const Business = require("../models/Business");
-const auth = require("../middleware/auth");
+const express = require("express");
+const router = express.Router();
 
-router.post("/add", auth("provider"), async(req,res)=>{
-  await new Business({...req.body,providerId:req.user.id}).save();
-  res.json("Business Added (Pending)");
-});
+const businessController = require("../controllers/businessController");
+const { protect } = require("../middleware/authMiddleware");
+const { authorize } = require("../middleware/roleMiddleware");
 
-router.get("/approved", async(req,res)=>{
-  const data = await Business.find({status:"approved"});
-  res.json(data);
-});
+/*
+====================================
+PUBLIC
+====================================
+*/
+
+router.get("/", businessController.getAllBusinesses);
+router.get("/:slug", businessController.getBusinessBySlug);
+
+/*
+====================================
+PROVIDER ROUTES
+====================================
+*/
+
+router.post("/", protect, authorize("provider"), businessController.createBusiness);
+router.put("/:id", protect, authorize("provider", "admin"), businessController.updateBusiness);
+router.delete("/:id", protect, authorize("provider", "admin"), businessController.deleteBusiness);
+
+/*
+====================================
+ADMIN ACTIONS
+====================================
+*/
+
+router.put("/approve/:id", protect, authorize("admin"), businessController.approveBusiness);
+router.put("/reject/:id", protect, authorize("admin"), businessController.rejectBusiness);
+router.put("/feature/:id", protect, authorize("admin"), businessController.toggleFeatured);
 
 module.exports = router;
-router.get("/search", async(req,res)=>{
-  const { city, category } = req.query;
-  const data = await Business.find({
-    city,
-    category,
-    status: "approved"
-  });
-  res.json(data);
-});
