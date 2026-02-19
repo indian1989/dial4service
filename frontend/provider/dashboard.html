@@ -1,51 +1,169 @@
-<h2>Provider Dashboard</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Provider Dashboard - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<ul>
-  <li><a href="add-business.html">Add Business</a></li>
-  <li><a href="my-listings.html">My Listings</a></li>
-  <li><a href="location.html">My Location</a></li>
-  <li><a href="google-boost.html">Google Boost</a></li>
-  <li><a href="paid-listing.html">Paid Plans</a></li>
-</ul>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f9;
+}
 
+/* Header */
+.header{
+  background:#003366;
+  color:white;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-<form id="addBusiness">
-  <input placeholder="Business Name" id="name"><br>
-  <input placeholder="Category" id="category"><br>
-  <input placeholder="City" id="city"><br>
-  <input placeholder="District" id="district"><br>
-  <input placeholder="State" id="state"><br>
-  <input placeholder="Phone" id="phone"><br>
-  <input placeholder="Email" id="email"><br>
-  <button>Add Business</button>
-</form>
+.header h2{
+  margin:0;
+}
 
-<p id="msg"></p>
+.header button{
+  background:#ff4d4d;
+  color:white;
+  border:none;
+  padding:8px 15px;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+/* Layout */
+.dashboard-container{
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:250px;
+  background:#002244;
+  padding-top:20px;
+}
+
+.sidebar a{
+  display:block;
+  color:white;
+  padding:12px 20px;
+  text-decoration:none;
+  font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar a:hover{
+  background:#0055aa;
+}
+
+/* Content */
+.content{
+  flex:1;
+  padding:30px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .dashboard-container{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h2>Provider Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="dashboard-container">
+
+  <!-- SIDEBAR MENU -->
+  <div class="sidebar">
+
+    <a href="dashboard.html">🏠 Dashboard</a>
+
+    <a href="add-business.html">➕ Add Business</a>
+
+    <a href="my-listings.html">📋 My Listings</a>
+
+    <a href="edit-business.html">✏ Edit Business</a>
+
+    <a href="upload-gallery.html">🖼 Upload Gallery</a>
+
+    <a href="location.html">📍 Manage Location</a>
+
+    <a href="paid-listing.html">💎 Paid Listing</a>
+
+    <a href="google-boost.html">🚀 Google Boost</a>
+
+    <a href="plan-status.html">📊 Plan Status</a>
+
+    <a href="payment-history.html">💰 Payment History</a>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <div class="card">
+      <h3>Welcome Provider</h3>
+      <p>Name: <span id="providerName">Loading...</span></p>
+      <p>Email: <span id="providerEmail">Loading...</span></p>
+    </div>
+
+    <div class="card">
+      <h3>Quick Stats</h3>
+      <p>Total Listings: <span id="totalListings">0</span></p>
+      <p>Active Plan: <span id="planStatus">Free</span></p>
+      <p>Pending Approvals: <span id="pendingCount">0</span></p>
+    </div>
+
+  </div>
+
+</div>
 
 <script>
-document.getElementById("addBusiness").onsubmit = async e => {
-  e.preventDefault();
 
-  const token = localStorage.getItem("token");
+// Backend se future me data load hoga
+document.getElementById("providerName").innerText = "Provider Name";
+document.getElementById("providerEmail").innerText = "provider@email.com";
+document.getElementById("totalListings").innerText = "2";
+document.getElementById("planStatus").innerText = "Premium";
+document.getElementById("pendingCount").innerText = "1";
 
-  const res = await fetch("https://dial4service.onrender.com/api/business/add",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":token
-    },
-    body: JSON.stringify({
-      name:name.value,
-      category:category.value,
-      city:city.value,
-      phone:phone.value
-    })
-  });
+// Logout placeholder
+function logout(){
+  alert("Provider Logged Out (Backend Connect Later)");
+}
 
-  const data = await res.text();
-  msg.innerText = data;
-};
+/*
 
-  <a href="payment-history.html">Payment History</a>
+Future Backend API:
 
+GET  /api/provider/profile
+GET  /api/provider/stats
+POST /api/provider/logout
+
+*/
 </script>
+
+</body>
+</html>
