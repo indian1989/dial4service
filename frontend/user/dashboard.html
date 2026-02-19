@@ -5,44 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
-  font-family: Arial;
   margin:0;
+  font-family:Arial, sans-serif;
   background:#f4f6f9;
 }
-header{
+
+.header{
   background:#003366;
   color:white;
-  padding:15px;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.container{
-  padding:20px;
+
+.header button{
+  background:#ff4d4d;
+  border:none;
+  color:white;
+  padding:8px 15px;
+  border-radius:4px;
+  cursor:pointer;
 }
+
+.dashboard-container{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:230px;
+  background:#002244;
+  padding-top:20px;
+}
+
+.sidebar a{
+  display:block;
+  color:white;
+  padding:12px 20px;
+  text-decoration:none;
+  font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar a:hover{
+  background:#0055aa;
+}
+
+.content{
+  flex:1;
+  padding:30px;
+}
+
 .card{
   background:white;
   padding:20px;
   border-radius:8px;
   box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+@media(max-width:768px){
+  .dashboard-container{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+  }
 }
 </style>
 </head>
+
 <body>
 
-<header>
-  <h2>Welcome User Dashboard</h2>
-</header>
+<div class="header">
+  <h2>User Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</div>
 
-<div class="container">
-  <div class="card">
-    <h3>Your Account Overview</h3>
-    <p>Name: <span id="userName">Loading...</span></p>
-    <p>Email: <span id="userEmail">Loading...</span></p>
+<div class="dashboard-container">
+
+  <div class="sidebar">
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="profile.html">👤 My Profile</a>
+    <a href="my-favorites.html">❤️ My Favorites</a>
+    <a href="../search.html">🔍 Search Businesses</a>
+    <a href="../listing.html">📋 All Listings</a>
   </div>
+
+  <div class="content">
+
+    <div class="card">
+      <h3>Welcome User</h3>
+      <p>Name: <span id="userName">Loading...</span></p>
+      <p>Email: <span id="userEmail">Loading...</span></p>
+    </div>
+
+    <div class="card">
+      <h3>Quick Stats</h3>
+      <p>Total Favorites: <span id="totalFav">0</span></p>
+      <p>Recent Searches: <span id="recentSearch">0</span></p>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
-// Later connect with backend
 document.getElementById("userName").innerText = "User Name";
 document.getElementById("userEmail").innerText = "user@email.com";
+document.getElementById("totalFav").innerText = "5";
+document.getElementById("recentSearch").innerText = "3";
+
+function logout(){
+  alert("User Logged Out (Backend Connect Later)");
+}
 </script>
 
 </body>
