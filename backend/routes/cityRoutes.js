@@ -1,34 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const City = require("../models/City");
-const adminAuth = require("../middleware/adminAuth");
 
-// ADD CITY (ADMIN)
-router.post("/add", adminAuth, async (req, res) => {
-  try {
-    const { name, state, popular } = req.body;
+const {
+  createCity,
+  getAllCities,
+  getCityBySlug,
+  updateCity,
+  deleteCity
+} = require("../controllers/cityController");
 
-    const slug = name.toLowerCase().replace(/\s+/g, "-");
+const { protect } = require("../middleware/authMiddleware");
+const { authorize } = require("../middleware/roleMiddleware");
 
-    const city = new City({
-      name,
-      state,
-      slug,
-      popular
-    });
+/*
+====================================
+PUBLIC ROUTES
+====================================
+*/
 
-    await city.save();
-    res.json({ msg: "City added", city });
+// Get all cities
+router.get("/", getAllCities);
 
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-});
+// Get single city by slug
+router.get("/:slug", getCityBySlug);
 
-// GET ALL ACTIVE CITIES (PUBLIC)
-router.get("/", async (req, res) => {
-  const cities = await City.find({ active: true }).sort({ name: 1 });
-  res.json(cities);
-});
+
+/*
+====================================
+ADMIN ROUTES
+====================================
+*/
+
+// Create city
+router.post("/", protect, authorize("admin"), createCity);
+
+// Update city
+router.put("/:id", protect, authorize("admin"), updateCity);
+
+// Delete city
+router.delete("/:id", protect, authorize("admin"), deleteCity);
+
 
 module.exports = router;
