@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Business - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  font-family: Arial;
+  background:#f4f6f9;
+  margin:0;
+}
+header{
+  background:#003366;
+  color:white;
+  padding:15px;
+}
+.container{
+  padding:20px;
+}
+form{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+}
+button{
+  background:#003366;
+  color:white;
+  padding:10px 20px;
+  border:none;
+  cursor:pointer;
+}
+button:hover{
+  background:#0055aa;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Edit Business</h2>
+</header>
+
+<div class="container">
+<form id="editBusinessForm">
+
+<label>Business Name</label>
+<input type="text" id="businessName">
+
+<label>Category</label>
+<select id="category">
+<option>Select Category</option>
+</select>
+
+<label>City</label>
+<select id="city">
+<option>Select City</option>
+</select>
+
+<label>Description</label>
+<textarea id="description"></textarea>
+
+<button type="submit">Update Business</button>
+
+</form>
+</div>
+
+<script>
+// Later backend API se data load hoga
+document.getElementById("businessName").value = "Sample Business";
+
+document.getElementById("editBusinessForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  alert("Business Updated (Backend Connect Later)");
+});
+</script>
+
+</body>
+</html>
