@@ -1,39 +1,3 @@
-const router = require("express").Router();
-const Admin = require("../models/Admin");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
-router.post("/login", async(req,res)=>{
-  const a = await Admin.findOne({email:req.body.email});
-  const ok = await bcrypt.compare(req.body.password,a.password);
-  if(!ok) return res.sendStatus(400);
-
-  const token = jwt.sign({id:a._id,role:"admin"},process.env.JWT_SECRET);
-  res.json({token});
-});
-
-module.exports = router;
-
-const Business = require("../models/Business");
-const auth = require("../middleware/auth");
-
-router.put("/approve/:id", auth("admin"), async(req,res)=>{
-  await Business.findByIdAndUpdate(req.params.id,{status:"approved"});
-  res.json("Approved");
-});
-
-const express = require("express");
-const router = express.Router();
-const { body, validationResult } = require("express-validator");
-const Business = require("../models/Business");
-const adminAuth = require("../middleware/adminAuth");
-const upload = require("../utils/multer"); // multer instance
-const { makeUniqueSlug } = require("../utils/slug");
-const fs = require("fs");
-const path = require("path");
-
-// POST /api/admin/business/add
-// fields: title, category, city, area, address, phone, email, website, description, featured, verified
 // images: multipart files field name 'images' (multiple)
 router.post(
   "/business/add",
