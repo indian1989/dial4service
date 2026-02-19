@@ -1,214 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Admin Dashboard | Dial4Service</title>
+<title>Admin Dashboard - Dial4Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-
 body{
-  display:flex;
-  min-height:100vh;
-  background:#f4f6f8;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6f9;
 }
 
-/* Sidebar */
-.sidebar{
-  width:230px;
-  background:#1f2937;
-  color:#fff;
-  padding:20px;
-}
-.sidebar h2{
-  margin-bottom:20px;
-  font-size:20px;
-}
-.sidebar a{
-  display:block;
-  color:#ddd;
-  text-decoration:none;
-  padding:10px;
-  margin-bottom:5px;
-  border-radius:4px;
-}
-.sidebar a:hover{
-  background:#374151;
-}
-
-/* Main */
-.main{
-  flex:1;
-  padding:20px;
-}
-
-/* Header */
 .header{
+  background:#111;
+  color:white;
+  padding:15px 20px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+}
+
+.header button{
+  background:#ff4d4d;
+  border:none;
+  color:white;
+  padding:8px 15px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+.dashboard-container{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:260px;
+  background:#222;
+  padding-top:20px;
+}
+
+.sidebar a{
+  display:block;
+  color:white;
+  padding:12px 20px;
+  text-decoration:none;
+  font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar a:hover{
+  background:#444;
+}
+
+.content{
+  flex:1;
+  padding:30px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
   margin-bottom:20px;
 }
-.header h1{
-  font-size:22px;
-}
-.logout{
-  background:red;
-  color:#fff;
-  border:none;
-  padding:8px 14px;
-  border-radius:4px;
-  cursor:pointer;
-}
 
-/* Cards */
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-bottom:30px;
+@media(max-width:768px){
+  .dashboard-container{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+  }
 }
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:8px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-.card h3{
-  font-size:16px;
-  color:#555;
-}
-.card p{
-  font-size:28px;
-  margin-top:10px;
-  color:#111;
-}
-
-/* Table */
-.table-box{
-  background:#fff;
-  padding:20px;
-  border-radius:8px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:10px;
-  border-bottom:1px solid #eee;
-  text-align:left;
-}
-th{
-  background:#f1f1f1;
-}
-.action-btn{
-  padding:5px 10px;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-}
-.approve{background:#28a745;color:#fff}
-.reject{background:#dc3545;color:#fff}
 </style>
 </head>
 
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <h2>Dial4Service</h2>
-  <a href="#">Dashboard</a>
-  <a href="#">Pending Businesses</a>
-  <a href="#">All Businesses</a>
-  <a href="#">Categories</a>
-  <a href="#">Providers</a>
-  <a href="#">Users</a>
-  <a href="#">Payments</a>
+<div class="header">
+  <h2>Admin Dashboard</h2>
+  <button onclick="logout()">Logout</button>
 </div>
 
-<!-- Main Content -->
-<div class="main">
+<div class="dashboard-container">
 
-  <div class="header">
-    <h1>Welcome, <span id="adminName">Admin</span></h1>
-    <button class="logout" onclick="logout()">Logout</button>
+  <div class="sidebar">
+
+    <a href="dashboard.html">🏠 Dashboard</a>
+
+    <a href="add-business.html">➕ Add Business</a>
+
+    <a href="business-list.html">📋 All Businesses</a>
+
+    <a href="approve-business.html">✔ Approve Business</a>
+
+    <a href="edit-business.html">✏ Edit Business</a>
+
+    <a href="add-category.html">📂 Add Category</a>
+
+    <a href="add-city.html">🏙 Add City</a>
+
+    <a href="users-providers.html">👥 Users & Providers</a>
+
+    <a href="payments-featured.html">💰 Payments</a>
+
+    <a href="invoice.html">🧾 Invoices</a>
+
+    <a href="expiry-monitor.html">⏳ Expiry Monitor</a>
+
   </div>
 
-  <!-- Stats Cards -->
-  <div class="cards">
-    <div class="card">
-      <h3>Total Businesses</h3>
-      <p id="totalBusinesses">0</p>
-    </div>
-    <div class="card">
-      <h3>Pending Approval</h3>
-      <p id="pendingBusinesses">0</p>
-    </div>
-    <div class="card">
-      <h3>Total Providers</h3>
-      <p id="totalProviders">0</p>
-    </div>
-    <div class="card">
-      <h3>Total Users</h3>
-      <p id="totalUsers">0</p>
-    </div>
-  </div>
+  <div class="content">
 
-  <!-- Pending Businesses -->
-  <div class="table-box">
-    <h3>Pending Business Approval</h3>
-    <br>
-    <table>
-      <thead>
-        <tr>
-          <th>Business Name</th>
-          <th>Category</th>
-          <th>City</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="pendingTable">
-        <!-- Dynamic rows later -->
-        <tr>
-          <td>Sample Business</td>
-          <td>Electrician</td>
-          <td>Delhi</td>
-          <td>
-            <button class="action-btn approve">Approve</button>
-            <button class="action-btn reject">Reject</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>System Overview</h3>
+      <p>Total Businesses: <span id="totalBusiness">0</span></p>
+      <p>Total Users: <span id="totalUsers">0</span></p>
+      <p>Total Providers: <span id="totalProviders">0</span></p>
+      <p>Total Revenue: ₹ <span id="totalRevenue">0</span></p>
+    </div>
+
+    <div class="card">
+      <h3>Pending Approvals</h3>
+      <p>Pending Businesses: <span id="pendingBusiness">0</span></p>
+    </div>
+
   </div>
 
 </div>
 
 <script>
-/* 🔐 Auth Guard */
-const token = localStorage.getItem("adminToken");
-if(!token){
-  window.location.href="login.html";
-}
+document.getElementById("totalBusiness").innerText = "120";
+document.getElementById("totalUsers").innerText = "80";
+document.getElementById("totalProviders").innerText = "40";
+document.getElementById("totalRevenue").innerText = "25000";
+document.getElementById("pendingBusiness").innerText = "5";
 
-/* Admin Name */
-document.getElementById("adminName").innerText =
-  localStorage.getItem("adminName") || "Admin";
-
-/* Dummy Stats (replace by backend later) */
-document.getElementById("totalBusinesses").innerText = 120;
-document.getElementById("pendingBusinesses").innerText = 8;
-document.getElementById("totalProviders").innerText = 45;
-document.getElementById("totalUsers").innerText = 560;
-
-/* Logout */
 function logout(){
-  localStorage.removeItem("adminToken");
-  localStorage.removeItem("adminName");
-  window.location.href="login.html";
+  alert("Admin Logged Out (Backend Connect Later)");
 }
 </script>
 
