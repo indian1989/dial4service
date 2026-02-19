@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Favorites - Dial4Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f4f6f9;
+}
+
+header{
+  background:#003366;
+  color:white;
+  padding:15px 20px;
+}
+
+.container{
+  max-width:1000px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.business-card{
+  background:white;
+  padding:20px;
+  margin-bottom:15px;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.business-info h3{
+  margin:0 0 5px 0;
+}
+
+.business-info p{
+  margin:3px 0;
+  font-size:14px;
+  color:#555;
+}
+
+button{
+  background:#cc0000;
+  color:white;
+  padding:8px 15px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#990000;
+}
+
+.empty-message{
+  text-align:center;
+  padding:50px;
+  color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>My Favorite Businesses</h2>
+</header>
+
+<div class="container" id="favoritesContainer">
+
+  <!-- Example Card (Backend se dynamic load hoga) -->
+  <div class="business-card">
+    <div class="business-info">
+      <h3>Sample Plumbing Service</h3>
+      <p>Category: Plumbing</p>
+      <p>City: Delhi</p>
+    </div>
+    <button onclick="removeFavorite()">Remove</button>
+  </div>
+
+</div>
+
+<script>
+
+// Example remove function
+function removeFavorite(){
+  alert("Removed from Favorites (Backend Connect Later)");
+}
+
+/*
+Future Backend API:
+
+GET    /api/user/favorites
+POST   /api/user/add-favorite
+DELETE /api/user/remove-favorite/:businessId
+
+*/
+</script>
+
+</body>
+</html>
