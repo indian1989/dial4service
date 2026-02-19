@@ -1,12 +1,16 @@
-document.getElementById("businessForm").addEventListener("submit", async function(e) {
-e.preventDefault();
+const express = require("express");
+const router = express.Router();
 
-const data = {
-businessName: document.getElementById("businessName").value,
-ownerName: document.getElementById("ownerName").value,
-category: document.getElementById("category").value,
-city: document.getElementById("city").value,
-phone: document.getElementById("phone").value,
-description: document.getElementById("description").value,
-);
+const {
+  register,
+  login,
+  getProfile
+} = require("../controllers/authController");
 
+const { protect } = require("../middleware/authMiddleware");
+
+router.post("/register", register);
+router.post("/login", login);
+router.get("/profile", protect, getProfile);
+
+module.exports = router;
