@@ -2,446 +2,315 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dial4Service – Find Local Services Near You</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dial4Service - India’s Trusted Local Business Directory</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
-a{text-decoration:none;color:#333}
-
-.top-header{
- display:flex;justify-content:space-between;align-items:center;
- padding:10px 20px;background:#fff;border-bottom:1px solid #ddd
-}
-.location-box select,.location-box button{padding:6px}
-.logo h1{margin:0;color:#0a66c2}
-.logo small{font-size:12px;color:#555}
-.menu a{margin-left:15px;font-weight:bold}
-
- .search-box{
-  display:flex;
-  gap:8px;
-  align-items:center;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
 }
 
-#nearMeBtn{
-  background:#28a745;
-  color:#fff;
-  border:none;
-  padding:10px 14px;
-  cursor:pointer;
-  border-radius:4px;
+/* ===== HEADER ===== */
+.header {
+  background: #0a3d62;
+  color: #fff;
+  padding: 10px 20px;
 }
 
-#nearMeBtn:hover{
-  background:#1e7e34;
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
- <style>
-.site-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 20px;
-  background:#fff;
-  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+.city-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.main-menu{
-  display:flex;
-  align-items:center;
-  gap:15px;
+.city-select select,
+.search-box select,
+.search-box input {
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
 }
 
-.main-menu a{
-  text-decoration:none;
-  color:#333;
-  font-weight:500;
+.logo-area {
+  text-align: center;
+  flex: 1;
 }
 
-.dropdown{
-  position:relative;
+.logo-area img {
+  height: 40px;
+  display: none;
 }
 
-.dropbtn{
-  background:#0a7cff;
-  color:#fff;
-  border:none;
-  padding:8px 14px;
-  cursor:pointer;
-  border-radius:4px;
+.logo-area h1 {
+  margin: 0;
+  font-size: 22px;
 }
 
-.dropdown-content{
-  display:none;
-  position:absolute;
-  right:0;
-  background:#fff;
-  min-width:170px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-  border-radius:6px;
-  padding:6px 0;
-  z-index:1000;
+.tagline {
+  font-size: 12px;
 }
 
-.dropdown-content a{
-  display:block;
-  padding:8px 12px;
-  color:#333;
-  text-decoration:none;
-  font-size:14px;
+.menu {
+  display: flex;
+  gap: 15px;
 }
 
-.dropdown-content a:hover{
-  background:#f2f2f2;
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
 }
 
-.dropdown:hover .dropdown-content{
-  display:block;
+.dropdown {
+  position: relative;
+  cursor: pointer;
 }
 
-.dropdown-content hr{
-  margin:5px 0;
-  border:none;
-  border-top:1px solid #eee;
-}
-</style>
-
-
-.ad-banner{
- margin:15px;background:#fff;padding:10px;text-align:center
-}
-.ad-banner img{width:100%;height:220px;object-fit:cover}
-
-.section{background:#fff;margin:15px;padding:20px}
-
-.popular-categories{
-  padding:30px 0;
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: white;
+  color: black;
+  right: 0;
+  min-width: 150px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
-.popular-categories h2{
-  margin-bottom:20px;
+.dropdown-content a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: black;
 }
 
-.category-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:18px;
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
-.category-card{
-  background:#fff;
-  border-radius:8px;
-  text-align:center;
-  padding:15px 10px;
-  text-decoration:none;
-  color:#333;
-  transition:0.25s;
+.search-box {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.category-card:hover{
-  box-shadow:0 6px 15px rgba(0,0,0,0.1);
-  transform:translateY(-4px);
+.search-box button {
+  padding: 6px 10px;
+  background: #f39c12;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-.category-card img{
-  width:42px;
-  height:42px;
-  margin-bottom:8px;
-  filter:invert(34%) sepia(92%) saturate(1350%) hue-rotate(197deg);
+/* ===== Banner ===== */
+.banner {
+  margin: 10px;
+  text-align: center;
 }
 
-.category-card span{
-  display:block;
-  font-size:14px;
-  font-weight:500;
+.banner img {
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
 }
 
-footer{
- background:#222;color:#fff;padding:20px;text-align:center
+/* ===== Categories ===== */
+.categories {
+  padding: 20px;
 }
-footer a{color:#ccc}
+
+.categories h2 {
+  text-align: center;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.category-card {
+  background: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.category-card:hover {
+  background: #dff9fb;
+}
+
+.category-card img {
+  width: 50px;
+  height: 50px;
+}
+
+/* ===== Footer ===== */
+footer {
+  background: #0a3d62;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+}
+footer a {
+  color: #f39c12;
+  text-decoration: none;
+  margin: 0 10px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="top-header">
-  <div class="location-box">
-    📍
-    <select id="citySelect"></select>
-    <button onclick="detectLocation()">Detect</button>
-  </div>
+<!-- ================= HEADER ================= -->
+<div class="header">
+  <div class="top-bar">
 
-  <div class="logo">
-    <h1>Dial4Service</h1>
-    <small>Find Trusted Local Services Near You</small>
-  </div>
-
-  <div class="menu">
-    <a href="index.html">Home</a>
-    <a href="search.html">All Businesses</a>
-    <a href="provider/login.html">Add Business</a>
-    <a href="advertise.html">Advertisement</a>
-  </div>
-
-    <!-- 🔐 LOGIN DROPDOWN -->
-    <div class="dropdown" id="authDropdown">
-      <button class="dropbtn">Login ▾</button>
-
-      <div class="dropdown-content" id="dropdownMenu">
-        <a href="user/login.html">User Login</a>
-        <a href="user/register.html">User Register</a>
-        <hr>
-        <a href="provider/login.html">Provider Login</a>
-        <a href="provider/register.html">Provider Register</a>
-      </div>
+    <!-- City + GPS -->
+    <div class="city-select">
+      <select id="citySelect"></select>
+      <button onclick="getLocation()">📍 Near Me</button>
     </div>
 
-  </nav>
-</header>
+    <!-- Logo / Text Rotation -->
+    <div class="logo-area">
+      <h1 id="siteText">Dial4Service</h1>
+      <div class="tagline" id="tagline">India’s Trusted Local Business Directory</div>
+      <img id="logoImg" src="assets/images/logo.png" alt="Logo">
+    </div>
 
-  </nav>
-</header>
+    <!-- Menu -->
+    <div class="menu">
+      <a href="index.html">Home</a>
+      <a href="all-business.html">All Business</a>
+      <a href="provider/register.html">Add Business</a>
 
-<!-- SEARCH BAR -->
-  <input type="text" id="searchKeyword" placeholder="Search for services">
-
-  <button id="searchBtn">Search</button>
-
-  <!-- 📍 Search Near Me -->
-  <button id="nearMeBtn" title="Search near your location">
-    📍 Near Me
-  </button>
-
-</div>
-
-<!-- AD BANNER -->
-<div class="ad-banner" id="adBanner">
-  <p>Loading Advertisement...</p>
-</div>
-
-<!-- POPULAR CATEGORIES -->
-<section class="popular-categories">
-  <h2>Popular Categories</h2>
-
-  <div class="category-grid" id="popularCategories">
-
-    <a href="category.html?slug=electrician" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/bolt.svg" alt="Electrician">
-      <span>Electrician</span>
-    </a>
-
-    <a href="category.html?slug=plumber" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/wrench.svg" alt="Plumber">
-      <span>Plumber</span>
-    </a>
-
-    <a href="category.html?slug=salon" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/scissors.svg" alt="Salon">
-      <span>Salon</span>
-    </a>
-
-    <a href="category.html?slug=ac-repair" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/snowflake.svg" alt="AC Repair">
-      <span>AC Repair</span>
-    </a>
-
-    <a href="category.html?slug=carpenter" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/home-modern.svg" alt="Carpenter">
-      <span>Carpenter</span>
-    </a>
-
+      <div class="dropdown">
+        Account ▼
+        <div class="dropdown-content">
+          <strong>User</strong>
+          <a href="auth/user-login.html">Login</a>
+          <a href="auth/user-register.html">Register</a>
+          <hr>
+          <strong>Provider</strong>
+          <a href="provider/login.html">Login</a>
+          <a href="provider/register.html">Register</a>
+        </div>
+      </div>
+    </div>
   </div>
-</section>
 
+  <!-- Search -->
+  <div class="search-box">
+    <select id="categorySelect"></select>
+    <button onclick="searchBusiness()">Search</button>
+    <button onclick="nearMeSearch()">Near Me Search</button>
+  </div>
+</div>
 
-<!-- FOOTER -->
+<!-- ================= Banner ================= -->
+<div class="banner">
+  <img id="bannerAd" src="assets/images/default-banner.jpg">
+</div>
+
+<!-- ================= Categories ================= -->
+<div class="categories">
+  <h2>Popular Categories</h2>
+  <div class="category-grid" id="categoryGrid"></div>
+</div>
+
+<!-- ================= Footer ================= -->
 <footer>
- <p><strong>Dial4Service</strong></p>
- <p>India’s trusted local service directory</p>
- <p>© 2026 Dial4Service</p>
+  <p>© 2026 Dial4Service</p>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="terms.html">Terms</a>
+  <a href="sitemap.xml">Sitemap</a>
 </footer>
 
 <script>
-const API = "https://dial4service.onrender.com/api";
+/* ===== Logo Rotation ===== */
+let showLogo = false;
+setInterval(() => {
+  showLogo = !showLogo;
+  document.getElementById("logoImg").style.display = showLogo ? "block" : "none";
+  document.getElementById("siteText").style.display = showLogo ? "none" : "block";
+  document.getElementById("tagline").style.display = showLogo ? "none" : "block";
+}, 4000);
 
-/* LOAD CITIES */
-fetch(API+"/cities")
-.then(r=>r.json())
-.then(data=>{
- let opt='<option value="">Select City</option>';
- data.forEach(c=>{
-  opt+=`<option value="${c.name}">${c.name}</option>`;
- });
- citySelect.innerHTML=opt;
- searchCity.innerHTML=opt;
-});
-
-/* LOAD CATEGORIES */
-fetch(API+"/categories")
-.then(r=>r.json())
-.then(data=>{
- let opt='<option value="">Select Category</option>';
- let cards='';
- data.forEach(cat=>{
-  opt+=`<option value="${cat.name}">${cat.name}</option>`;
-  cards+=`
-   <div class="category" onclick="goCategory('${cat.name}')">
-    <img src="${cat.image}">
-    <p>${cat.name}</p>
-   </div>`;
- });
- searchCategory.innerHTML=opt;
- categoryList.innerHTML=cards;
-});
-
-/* LOAD ACTIVE AD */
-fetch(API+"/ads/active")
-.then(r=>r.json())
-.then(ad=>{
- if(!ad) return adBanner.innerHTML="No Advertisement";
- adBanner.innerHTML=`<img src="${ad.image}">`;
-});
-
-/* SEARCH */
-function search(){
- const city=searchCity.value;
- const cat=searchCategory.value;
- location.href=`search.html?city=${city}&category=${cat}`;
- <button onclick="nearMe()">Near Me</button>
-
-}
-
-function goCategory(cat){
- location.href=`search.html?category=${cat}`;
-}
-
-// Normal Search
-document.getElementById("searchBtn").addEventListener("click", function(){
-  const keyword = searchKeyword.value.trim();
-  if(!keyword){
-    alert("Please enter search keyword");
-    return;
-  }
-  window.location.href = "search.html?q=" + encodeURIComponent(keyword);
-});
-
-// 📍 Search Near Me
-document.getElementById("nearMeBtn").addEventListener("click", function(){
-
-  if(!navigator.geolocation){
-    alert("Geolocation not supported");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    function(position){
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      // Redirect with location
-      window.location.href =
-        `search-near-me.html?lat=${lat}&lng=${lng}`;
-    },
-    function(){
-      alert("Location permission denied");
-    }
-  );
-
-});
-
-/* LOCATION */
-function detectLocation(){
- if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(()=>{
-   alert("Location detected (use near me search)");
+/* ===== Load Cities ===== */
+fetch("/api/cities")
+.then(res => res.json())
+.then(data => {
+  let citySelect = document.getElementById("citySelect");
+  data.data.forEach(city => {
+    citySelect.innerHTML += `<option value="${city.slug}">${city.name}</option>`;
   });
- }
-}
-
-function nearMe(){
-  if(!navigator.geolocation){
-    alert("GPS supported nahi hai");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    position=>{
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      // search page par redirect
-      window.location.href =
-        `search.html?lat=${lat}&lng=${lng}`;
-    },
-    ()=>{
-      alert("Location permission allow karein");
-    }
-  );
-}
-
- //login drop down
-const userToken = localStorage.getItem("userToken");
-const providerToken = localStorage.getItem("providerToken");
-const dropdownMenu = document.getElementById("dropdownMenu");
-
-if(userToken){
-  dropdownMenu.innerHTML = `
-    <a href="user/dashboard.html">My Account</a>
-    <a href="#" onclick="logoutUser()">Logout</a>
-  `;
-}
-
-if(providerToken){
-  dropdownMenu.innerHTML = `
-    <a href="provider/dashboard.html">Provider Dashboard</a>
-    <a href="#" onclick="logoutProvider()">Logout</a>
-  `;
-}
-
-function logoutUser(){
-  localStorage.removeItem("userToken");
-  location.reload();
-}
-
-function logoutProvider(){
-  localStorage.removeItem("providerToken");
-  location.reload();
-}
-
- // popular categories
- 
-/*
-const categories = [
- {name:"Electrician", slug:"electrician", icon:"bolt"},
- {name:"Plumber", slug:"plumber", icon:"wrench"},
- {name:"Salon", slug:"salon", icon:"scissors"}
-];
-
-const box = document.getElementById("popularCategories");
-box.innerHTML = "";
-
-categories.forEach(cat=>{
-  box.innerHTML += `
-    <a href="category.html?slug=${cat.slug}" class="category-card">
-      <img src="https://unpkg.com/@heroicons/outline@2.0.18/${cat.icon}.svg">
-      <span>${cat.name}</span>
-    </a>
-  `;
 });
-*/
 
+/* ===== Load Categories ===== */
+fetch("/api/categories")
+.then(res => res.json())
+.then(data => {
+  let grid = document.getElementById("categoryGrid");
+  let select = document.getElementById("categorySelect");
+
+  data.data.forEach(cat => {
+    grid.innerHTML += `
+      <div class="category-card" onclick="goCategory('${cat.slug}')">
+        <img src="${cat.icon}" alt="${cat.name}">
+        <p>${cat.name}</p>
+      </div>`;
+
+    select.innerHTML += `<option value="${cat.slug}">${cat.name}</option>`;
+  });
+});
+
+/* ===== Banner Load ===== */
+fetch("/api/advertisements/position/homepage_top")
+.then(res => res.json())
+.then(data => {
+  if(data.data.length > 0){
+    document.getElementById("bannerAd").src = data.data[0].image;
+  }
+});
+
+/* ===== Functions ===== */
+function searchBusiness(){
+  let city = document.getElementById("citySelect").value;
+  let category = document.getElementById("categorySelect").value;
+  window.location.href = `search.html?city=${city}&category=${category}`;
+}
+
+function nearMeSearch(){
+  window.location.href = `search.html?nearMe=true`;
+}
+
+function goCategory(slug){
+  window.location.href = `category.html?slug=${slug}`;
+}
+
+function getLocation(){
+  navigator.geolocation.getCurrentPosition(pos=>{
+    window.location.href = `search.html?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}`;
+  });
+}
 </script>
-
 
 </body>
 </html>
-
-
-
-
-
-
-
