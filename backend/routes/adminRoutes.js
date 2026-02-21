@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const jwt = require{"jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
 //Dummy middlewares
