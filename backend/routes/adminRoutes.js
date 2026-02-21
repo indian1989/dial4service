@@ -23,9 +23,6 @@ router.post("/login", async (req, res) => {
     // Replace with real Admin model
     if (email !== "admin@test.com" || password !== "123456") {
       return res.status(401).json({ msg: "Invalid credentials" });
-
-    if (admin.password !== password)
-      return res.status(401).json({ msg: "Wrong password" });
     }
 
     const token = jwt.sign(
