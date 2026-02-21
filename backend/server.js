@@ -15,11 +15,18 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+//----------------- ROUTES (External Files) ----------------
+app.use("/api/admin", require("./routes/adminRoutes" ));
+app.use("/api/provider", require("./routes/providerRoutes" ));
+app.use("/api/cities", require("./routes/cityRoutes" ));
+
 // ---------------- MONGODB CONNECT ----------------
-mongoose
-  .connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log("❌ MongoDB Error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB Error:", err));
+    process.exit(1);
+  });
 
 // ---------------- SCHEMAS ----------------
 
@@ -74,7 +81,7 @@ const auth = (roles = []) => {
 
 // ---------------- TEST ROUTE ----------------
 app.get("/", (req, res) => {
-  res.send("✅ Dial4Service Backend Running");
+  res.send("✅ Dial4Service Backend Running 🚀");
 });
 
 // ---------------- AUTH ROUTES ----------------
@@ -166,27 +173,8 @@ app.get(
 );
 
 // ---------------- SERVER START ----------------
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
   console.log("🚀 Server running on port " + PORT);
 });
-
-
-const express = require("express");
-const app = express();
-
-app.use(express.json());
-
-
-app.use("/api/admin", require("./routes/adminRoutes"));
-
-app.get("/", (req, res) => {
-  res.send("Dial4Service Backend Running");
-});
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log("Server running on " + PORT));
-
-app.use("/api/provider", require("./routes/providerRoutes"));
-app.use("/api/cities", require("./routes/cityRoutes"));
