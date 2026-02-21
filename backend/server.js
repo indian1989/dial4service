@@ -21,12 +21,10 @@ app.use("/api/provider", require("./routes/providerRoutes" ));
 app.use("/api/cities", require("./routes/cityRoutes" ));
 
 // ---------------- MONGODB CONNECT ----------------
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => {
-    console.error("❌ MongoDB Error:", err));
-    process.exit(1);
-  });
+  .catch((err) => console.log("❌ MongoDB Error:", err));
 
 // ---------------- SCHEMAS ----------------
 
