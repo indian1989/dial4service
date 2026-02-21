@@ -68,6 +68,19 @@ router.post(
   }
 );
 
+const express = require("express");
+const router = express.Router();
+
+// Example Admin Route
+router.get("/", (req, res) => {
+  res.json({ message: "Admin route working " });
+});
+
+// Example Admin POST
+router.post("/create", (req, res) => {
+  res.json({ message: "Admin created successfully " });
+});
+
 module.exports = router;
 
 // ADMIN LOGIN
