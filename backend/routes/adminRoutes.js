@@ -73,7 +73,7 @@ const router = express.Router();
 
 // Example Admin Route
 router.get("/", (req, res) => {
-  res.json({ message: "Admin route working " });
+  res.json({ message: "Admin route working ✅" });
 });
 
 // Example Admin POST
