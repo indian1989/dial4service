@@ -124,4 +124,7 @@ router.put("/profile", providerController.updateProfile);
 // Change password
 router.put("/change-password", providerController.changePassword);
 
+router.get("/", (req, res) => {
+  res.json({ message: "Provider route working ✅" });
+});
 module.exports = router;
