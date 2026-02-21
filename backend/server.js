@@ -4,6 +4,8 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+const User = require("./models/User");
+const Business = require("./models/Business");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
@@ -25,36 +27,6 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
-
-// ---------------- SCHEMAS ----------------
-
-// User / Provider / Admin
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, unique: true },
-  password: String,
-  role: {
-    type: String,
-    enum: ["user", "provider", "admin"],
-    default: "user",
-  },
-});
-
-const User = mongoose.model("User", userSchema);
-
-// Business
-const businessSchema = new mongoose.Schema({
-  title: String,
-  category: String,
-  city: String,
-  phone: String,
-  description: String,
-  ownerId: mongoose.Schema.Types.ObjectId,
-  approved: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
-});
-
-const Business = mongoose.model("Business", businessSchema);
 
 // ---------------- AUTH MIDDLEWARE ----------------
 const auth = (roles = []) => {
