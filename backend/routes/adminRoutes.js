@@ -55,7 +55,7 @@ router.post(
 
       res.status(201).json({ msg: "Business added (demo)" });
     } catch (err) {
-      res.status(500).json({ msg: Server Error" });
+      res.status(500).json({ msg: "Server Error" });
     }
   }
   );
