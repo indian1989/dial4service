@@ -72,60 +72,109 @@ table th { background:#f4f4f4; }
 </div>
 
 <script>
-// Auto slug generator (future use)
+
+const API_BASE = "https://dial4service.onrender.com/api/cities";
+
+// Page load par cities load karo
+document.addEventListener("DOMContentLoaded", loadCities);
+
+// Slug generator
 function generateSlug(text){
   return text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 }
 
-// Submit City Form
-document.getElementById("cityForm").addEventListener("submit", function(e){
+// Load Cities
+async function loadCities(){
+  try{
+    const res = await fetch(API_BASE);
+    const data = await res.json();
+
+    const table = document.getElementById("cityTable");
+    table.innerHTML = "";
+
+    data.data.forEach((city, index)=>{
+      table.innerHTML += `
+        <tr>
+          <td>${index+1}</td>
+          <td>${city.cityName}</td>
+          <td>${city.state}</td>
+          <td>${city.status}</td>
+          <td>
+            <button onclick="editCity('${city._id}','${city.cityName}','${city.state}','${city.status}')">Edit</button>
+            <button onclick="deleteCity('${city._id}')">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+
+  }catch(err){
+    console.log("Load Error:", err);
+  }
+}
+
+// Submit Form
+document.getElementById("cityForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
+  const id = document.getElementById("cityId").value;
+
   const cityData = {
-    id: cityId.value,
-    cityName: cityName.value,
-    state: stateName.value,
-    slug: generateSlug(cityName.value),
-    status: cityStatus.value
+    cityName: document.getElementById("cityName").value,
+    state: document.getElementById("stateName").value,
+    slug: generateSlug(document.getElementById("cityName").value),
+    status: document.getElementById("cityStatus").value
   };
 
-  console.log("City Data (send to backend):", cityData);
+  try{
+    const res = await fetch(
+      id ? API_BASE + "/" + id : API_BASE,
+      {
+        method: id ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("adminToken")
+        },
+        body: JSON.stringify(cityData)
+      }
+    );
 
-  /*
-  fetch('/api/admin/add-city', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(cityData)
-  })
-  */
+    const data = await res.json();
 
-  alert("City saved (frontend only)");
-  this.reset();
+    alert(data.message || "Success");
+    this.reset();
+    loadCities();
+
+  }catch(err){
+    console.log("Save Error:", err);
+  }
 });
 
-// Edit City
+// Edit
 function editCity(id, city, state, status){
-  cityId.value = id;
-  cityName.value = city;
-  stateName.value = state;
-  cityStatus.value = status;
+  document.getElementById("cityId").value = id;
+  document.getElementById("cityName").value = city;
+  document.getElementById("stateName").value = state;
+  document.getElementById("cityStatus").value = status;
   window.scrollTo(0,0);
 }
 
-// Delete City
-function deleteCity(id){
-  if(confirm("Are you sure to delete this city?")){
-    console.log("Delete city id:", id);
-
-    /*
-    fetch('/api/admin/delete-city/'+id,{
-      method:'DELETE'
-    })
-    */
-
-    alert("City deleted (frontend only)");
+// Delete
+async function deleteCity(id){
+  if(confirm("Are you sure?")){
+    try{
+      await fetch(API_BASE + "/" + id,{
+        method: "DELETE",
+        headers:{
+          "Authorization": "Bearer " + localStorage.getItem("adminToken")
+        }
+      });
+      loadCities();
+    }catch(err){
+      console.log("Delete Error:", err);
+    }
   }
 }
+
 </script>
 
 </body>
