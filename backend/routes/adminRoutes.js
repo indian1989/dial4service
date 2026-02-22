@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { protect } = require("../middleware/auth");
+const { authorize } = require("../middleware/roleMiddleware");
 const { body, validationResult } = require("express-validator");
 
 //Dummy middlewares
@@ -56,6 +58,40 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// CREATE NEW ADMIN (Only Super Admin)
+router.post(
+  "/create-admin",
+  protect,
+  authorize("super-admin"),
+  async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+
+      const existing = await User.findOne({ email });
+      if (existing) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+
+      const hash = await bcrypt.hash(password, 10);
+
+      const newAdmin = new User({
+        name,
+        email,
+        password: hash,
+        role: "admin"
+      });
+
+      await newAdmin.save();
+
+      res.status(201).json({
+        message: "Admin Created Successfully"
+      });
+
+    } catch (err) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
 // ADD BUSINESS
 router.post(
   "/business/add",
