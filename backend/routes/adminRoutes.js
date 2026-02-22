@@ -22,7 +22,10 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     // Check email
-    const admin = await User.findOne({ email, role: "admin" });
+   const admin = await User.findOne({
+  email,
+  role: { $in: ["admin", "super-admin"] }
+});
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
