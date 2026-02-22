@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
@@ -17,23 +18,38 @@ router.get("/", (req, res) => {
 
 // ADMIN LOGIN
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    // Replace with real Admin model
-    if (email !== "admin@test.com" || password !== "123456") {
-      return res.status(401).json({ msg: "Invalid credentials" });
+    const { email, password } = req.body;
+
+    // Check email
+    const admin = await User.findOne({ email, role: "admin" });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
     }
 
+    // Check password
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Wrong password" });
+    }
+
+    // Generate token
     const token = jwt.sign(
-      { id: "adminid", role: "admin" },
+      { id: admin._id, role: admin.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      admin: {
+        name: admin.name,
+        email: admin.email
+      }
+    });
+
   } catch (err) {
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
