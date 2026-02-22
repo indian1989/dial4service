@@ -49,20 +49,31 @@ const auth = (roles = []) => {
   };
 };
 
-// Temperory Admin
+// ===== SETUP SUPER ADMIN (RUN ONLY ONCE) =====
 app.get("/setup-super-admin", async (req, res) => {
-  const existing = await User.findOne({ email: "rahmathussain.hjp@gmail.com" });
-  if (existing) return res.send("Already exists");
+  try {
+    const existing = await User.findOne({
+      email: "rahmathussain.hjp@gmail.com"
+    });
 
-  await User.create({
-    name: "Rahmat Hussain",
-    email: "rahmathussain.hjp@gmail.com",
-    phone: "6200152506",
-    password: "ImInvisible@4you",   // 🔥 Plain password
-    role: "super-admin"
-  });
+    if (existing) {
+      return res.send("Already exists");
+    }
 
-  res.send("Super Admin Created");
+    await User.create({
+      name: "Rahmat Hussain",
+      email: "rahmathussain.hjp@gmail.com",
+      phone: "6200152506",
+      password: "ImInvisible@4you", // plain password
+      role: "super-admin"
+    });
+
+    res.send("Super Admin Created");
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error creating super admin");
+  }
 });
 
 // ---------------- TEST ROUTE ----------------
