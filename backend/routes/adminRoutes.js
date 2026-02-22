@@ -25,16 +25,12 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password);
+    const isMatch = await admin.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Wrong password" });
     }
 
-    const token = jwt.sign(
-      { id: admin._id, role: admin.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const token = admin.generateToken();
 
     res.json({
       token,
@@ -46,11 +42,9 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 // CREATE ADMIN (Only Super Admin)
 router.post(
   "/create-admin",
