@@ -21,14 +21,12 @@ router.post("/login", async (req, res) => {
       role: { $in: ["admin", "super-admin"] }
     });
 
-    if (!admin) {
+    if (!admin)
       return res.status(404).json({ message: "Admin not found" });
-    }
 
     const isMatch = await admin.matchPassword(password);
-    if (!isMatch) {
+    if (!isMatch)
       return res.status(400).json({ message: "Wrong password" });
-    }
 
     const token = admin.generateToken();
 
@@ -40,7 +38,6 @@ router.post("/login", async (req, res) => {
         role: admin.role
       }
     });
-
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
