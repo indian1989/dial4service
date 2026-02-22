@@ -53,18 +53,20 @@ const auth = (roles = []) => {
 };
 
 // Temperory Admin
-app.get("/create-admin", async (req, res) => {
+app.get("/setup-super-admin", async (req, res) => {
+  const existing = await User.findOne({ email: "rahmathussain.hjp@gmail.com" });
+  if (existing) return res.send("Already exists");
+
   const hash = await bcrypt.hash("ImInvisible@4you", 10);
 
-  const admin = new User({
+  await User.create({
     name: "Rahmat Hussain",
     email: "rahmathussain.hjp@gmail.com",
     password: hash,
     role: "super-admin"
   });
 
-  await admin.save();
-  res.send("Admin Created Successfully");
+  res.send("Super Admin Created");
 });
 
 // ---------------- TEST ROUTE ----------------
