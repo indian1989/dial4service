@@ -3,15 +3,12 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const { protect } = require("../middleware/auth");
 const { authorize } = require("../middleware/roleMiddleware");
 
-// ================= ADMIN ROUTES =================
-
-// Test Route
+// TEST ROUTE
 router.get("/", (req, res) => {
-  res.json({ message: "Admin route working ✅" });
+  res.json({ message: "Admin route working" });
 });
 
 // ADMIN LOGIN
@@ -43,11 +40,13 @@ router.post("/login", async (req, res) => {
       token,
       admin: {
         name: admin.name,
-        email: admin.email
+        email: admin.email,
+        role: admin.role
       }
     });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -82,6 +81,7 @@ router.post(
       });
 
     } catch (err) {
+      console.error(err);
       res.status(500).json({ message: "Server error" });
     }
   }
