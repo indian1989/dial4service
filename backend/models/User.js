@@ -25,10 +25,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
-  role: {
-    type: String,
-    default: ROLES.USER
-  },
+ role: {
+  type: String,
+  enum: ["user", "provider", "admin", "super-admin"],
+  default: "user"
+},
   favorites: [
     {
       type: mongoose.Schema.Types.ObjectId,
