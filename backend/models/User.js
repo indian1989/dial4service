@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   type: String,
   enum: ["user", "provider", "admin", "super-admin"],
   default: "user"
-},
+}
   favorites: [
     {
       type: mongoose.Schema.Types.ObjectId,
