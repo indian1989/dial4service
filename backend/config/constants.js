@@ -4,8 +4,7 @@ module.exports = {
     PROVIDER: "provider",
     ADMIN: "admin",
     SUPER_ADMIN: "super-admin"
-  }
-};
+  },
 
   PLANS: {
     FREE: "free",
