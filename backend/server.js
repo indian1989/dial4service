@@ -59,7 +59,8 @@ app.get("/setup-super-admin", async (req, res) => {
       email: "rahmathussain.hjp@gmail.com"
     });
 
-    if (existing) return res.send("Already exists");
+    if (existing)
+      return res.send("Already exists");
 
     await User.create({
       name: "Rahmat Hussain",
