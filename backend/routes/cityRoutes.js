@@ -20,8 +20,8 @@ ADMIN ONLY
 ====================================
 */
 
-router.post("/", protect, authorize("admin"), cityController.createCity);
-router.put("/:id", protect, authorize("admin"), cityController.updateCity);
-router.delete("/:id", protect, authorize("admin"), cityController.deleteCity);
+router.post("/", protect, authorize("admin", "super-admin"), cityController.createCity);
+router.put("/:id", protect, authorize("admin", "super-admin"), cityController.updateCity);
+router.delete("/:id", protect, authorize("admin", "super-admin"), cityController.deleteCity);
 
 module.exports = router;
