@@ -2,8 +2,10 @@ module.exports = {
   ROLES: {
     USER: "user",
     PROVIDER: "provider",
-    ADMIN: "admin"
-  },
+    ADMIN: "admin",
+    SUPER_ADMIN: "super-admin"
+  }
+};
 
   PLANS: {
     FREE: "free",
