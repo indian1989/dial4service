@@ -75,15 +75,12 @@ table th { background:#f4f4f4; }
 
 const API_BASE = "https://dial4service.onrender.com/api/cities";
 
-// Page load par cities load karo
 document.addEventListener("DOMContentLoaded", loadCities);
 
-// Slug generator
 function generateSlug(text){
   return text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 }
 
-// Load Cities
 async function loadCities(){
   try{
     const res = await fetch(API_BASE);
@@ -96,11 +93,10 @@ async function loadCities(){
       table.innerHTML += `
         <tr>
           <td>${index+1}</td>
-          <td>${city.cityName}</td>
-          <td>${city.state}</td>
-          <td>${city.status}</td>
+          <td>${city.name}</td>
+          <td>${city.isActive ? "Active" : "Inactive"}</td>
           <td>
-            <button onclick="editCity('${city._id}','${city.cityName}','${city.state}','${city.status}')">Edit</button>
+            <button onclick="editCity('${city._id}','${city.name}','${city.isActive}')">Edit</button>
             <button onclick="deleteCity('${city._id}')">Delete</button>
           </td>
         </tr>
@@ -108,21 +104,18 @@ async function loadCities(){
     });
 
   }catch(err){
-    console.log("Load Error:", err);
+    console.log(err);
   }
 }
 
-// Submit Form
 document.getElementById("cityForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
   const id = document.getElementById("cityId").value;
 
   const cityData = {
-    cityName: document.getElementById("cityName").value,
-    state: document.getElementById("stateName").value,
-    slug: generateSlug(document.getElementById("cityName").value),
-    status: document.getElementById("cityStatus").value
+    name: document.getElementById("cityName").value,
+    isActive: document.getElementById("cityStatus").value === "active"
   };
 
   try{
@@ -139,43 +132,121 @@ document.getElementById("cityForm").addEventListener("submit", async function(e)
     );
 
     const data = await res.json();
-
     alert(data.message || "Success");
     this.reset();
     loadCities();
 
   }catch(err){
-    console.log("Save Error:", err);
+    console.log(err);
   }
 });
 
-// Edit
-function editCity(id, city, state, status){
+function editCity(id, name, isActive){
   document.getElementById("cityId").value = id;
-  document.getElementById("cityName").value = city;
-  document.getElementById("stateName").value = state;
-  document.getElementById("cityStatus").value = status;
-  window.scrollTo(0,0);
+  document.getElementById("cityName").value = name;
+  document.getElementById("cityStatus").value = isActive ? "active" : "inactive";
 }
 
-// Delete
 async function deleteCity(id){
-  if(confirm("Are you sure?")){
-    try{
-      await fetch(API_BASE + "/" + id,{
-        method: "DELETE",
-        headers:{
+  if(confirm("Delete this city?")){
+    await fetch(API_BASE + "/" + id,{
+      method: "DELETE",
+      headers:{
+        "Authorization": "Bearer " + localStorage.getItem("adminToken")
+      }
+    });
+    loadCities();
+  }
+}
+
+</script><script>
+
+const API_BASE = "https://dial4service.onrender.com/api/cities";
+
+document.addEventListener("DOMContentLoaded", loadCities);
+
+function generateSlug(text){
+  return text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+}
+
+async function loadCities(){
+  try{
+    const res = await fetch(API_BASE);
+    const data = await res.json();
+
+    const table = document.getElementById("cityTable");
+    table.innerHTML = "";
+
+    data.data.forEach((city, index)=>{
+      table.innerHTML += `
+        <tr>
+          <td>${index+1}</td>
+          <td>${city.name}</td>
+          <td>${city.isActive ? "Active" : "Inactive"}</td>
+          <td>
+            <button onclick="editCity('${city._id}','${city.name}','${city.isActive}')">Edit</button>
+            <button onclick="deleteCity('${city._id}')">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+
+  }catch(err){
+    console.log(err);
+  }
+}
+
+document.getElementById("cityForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const id = document.getElementById("cityId").value;
+
+  const cityData = {
+    name: document.getElementById("cityName").value,
+    isActive: document.getElementById("cityStatus").value === "active"
+  };
+
+  try{
+    const res = await fetch(
+      id ? API_BASE + "/" + id : API_BASE,
+      {
+        method: id ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
           "Authorization": "Bearer " + localStorage.getItem("adminToken")
-        }
-      });
-      loadCities();
-    }catch(err){
-      console.log("Delete Error:", err);
-    }
+        },
+        body: JSON.stringify(cityData)
+      }
+    );
+
+    const data = await res.json();
+    alert(data.message || "Success");
+    this.reset();
+    loadCities();
+
+  }catch(err){
+    console.log(err);
+  }
+});
+
+function editCity(id, name, isActive){
+  document.getElementById("cityId").value = id;
+  document.getElementById("cityName").value = name;
+  document.getElementById("cityStatus").value = isActive ? "active" : "inactive";
+}
+
+async function deleteCity(id){
+  if(confirm("Delete this city?")){
+    await fetch(API_BASE + "/" + id,{
+      method: "DELETE",
+      headers:{
+        "Authorization": "Bearer " + localStorage.getItem("adminToken")
+      }
+    });
+    loadCities();
   }
 }
 
 </script>
-
 </body>
 </html>
