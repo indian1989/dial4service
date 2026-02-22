@@ -54,12 +54,12 @@ const auth = (roles = []) => {
 
 // Temperory Admin
 app.get("/create-admin", async (req, res) => {
-  const hash = await bcrypt.hash("YourStrongPassword123", 10);
+  const hash = await bcrypt.hash("ImInvisible@4you", 10);
 
   const admin = new User({
     name: "Rahmat Hussain",
     email: "rahmathussain.hjp@gmail.com",
-    password: I'mInvisible@4you,
+    password: hash,
     role: "super-admin"
   });
 
