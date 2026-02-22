@@ -52,6 +52,21 @@ const auth = (roles = []) => {
   };
 };
 
+// Temperory Admin
+app.get("/create-admin", async (req, res) => {
+  const hash = await bcrypt.hash("YourStrongPassword123", 10);
+
+  const admin = new User({
+    name: "Rahmat Hussain",
+    email: "rahmathussain.hjp@gmail.com",
+    password: I'mInvisible@4you,
+    role: "super-admin"
+  });
+
+  await admin.save();
+  res.send("Admin Created Successfully");
+});
+
 // ---------------- TEST ROUTE ----------------
 app.get("/", (req, res) => {
   res.send("✅ Dial4Service Backend Running 🚀");
