@@ -1,30 +1,36 @@
 // ================================
-// Dial4Service - server.js
+// Dial4Service - Scalable Server
 // ================================
 
 const express = require("express");
 const mongoose = require("mongoose");
-const User = require("./models/User");
-const Business = require("./models/Business");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
+
+const User = require("./models/User");
+const Business = require("./models/Business");
 
 const app = express();
 
 // ---------------- MIDDLEWARE ----------------
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
-//----------------- ROUTES (External Files) ----------------
-app.use("/api/admin", require("./routes/adminRoutes" ));
-app.use("/api/provider", require("./routes/providerRoutes" ));
-app.use("/api/cities", require("./routes/cityRoutes" ));
+// Rate Limiting (Protection)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+});
+app.use(limiter);
 
-// ---------------- MONGODB CONNECT ----------------
+// ---------------- DATABASE ----------------
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    autoIndex: false, // Important for large DB
+  })
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
 
@@ -49,41 +55,9 @@ const auth = (roles = []) => {
   };
 };
 
-// ===== SETUP SUPER ADMIN (RUN ONLY ONCE) =====
-app.get("/setup-super-admin", async (req, res) => {
-  try {
-    const existing = await User.findOne({
-      email: "rahmathussain.hjp@gmail.com"
-    });
-
-    if (existing) {
-      return res.send("Already exists");
-    }
-
-    await User.create({
-      name: "Rahmat Hussain",
-      email: "rahmathussain.hjp@gmail.com",
-      phone: "6200152506",
-      password: "ImInvisible@4you", // plain password
-      role: "super-admin"
-    });
-
-    res.send("Super Admin Created");
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error creating super admin");
-  }
-});
-
-// ---------------- TEST ROUTE ----------------
-app.get("/", (req, res) => {
-  res.send("✅ Dial4Service Backend Running 🚀");
-});
-
 // ---------------- AUTH ROUTES ----------------
 
-// Register (user / provider)
+// Register
 app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -108,7 +82,7 @@ app.post("/api/auth/register", async (req, res) => {
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).lean();
   if (!user) return res.status(404).json({ msg: "User not found" });
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -125,7 +99,7 @@ app.post("/api/auth/login", async (req, res) => {
 
 // ---------------- BUSINESS ROUTES ----------------
 
-// Add business (Provider / Admin)
+// Add Business
 app.post("/api/business/add", auth(["provider", "admin"]), async (req, res) => {
   const business = new Business({
     ...req.body,
@@ -137,9 +111,8 @@ app.post("/api/business/add", auth(["provider", "admin"]), async (req, res) => {
   res.json({ msg: "Business added", business });
 });
 
-// Approve business (Admin only)
-app.put(
-  "/api/business/approve/:id",
+// Approve
+app.put("/api/business/approve/:id",
   auth(["admin"]),
   async (req, res) => {
     await Business.findByIdAndUpdate(req.params.id, { approved: true });
@@ -147,29 +120,57 @@ app.put(
   }
 );
 
-// Public business list (Justdial style)
+// 🚀 SCALABLE LIST (Pagination + Limit Cap)
 app.get("/api/business/list", async (req, res) => {
-  const { city, category } = req.query;
+  try {
+    const {
+      city,
+      category,
+      page = 1,
+      limit = 20
+    } = req.query;
 
-  const filter = { approved: true };
-  if (city) filter.city = city;
-  if (category) filter.category = category;
+    const safeLimit = Math.min(parseInt(limit), 50); // Max 50 per request
+    const skip = (page - 1) * safeLimit;
 
-  const businesses = await Business.find(filter);
-  res.json(businesses);
+    const filter = { approved: true };
+    if (city) filter.city = city;
+    if (category) filter.category = category;
+
+    const businesses = await Business.find(filter)
+      .skip(skip)
+      .limit(safeLimit)
+      .lean();
+
+    const total = await Business.countDocuments(filter);
+
+    res.json({
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / safeLimit),
+      data: businesses,
+    });
+
+  } catch (err) {
+    res.status(500).json({ msg: "Server error" });
+  }
 });
 
-// Provider ke businesses
-app.get(
-  "/api/business/my",
+// Provider Businesses
+app.get("/api/business/my",
   auth(["provider", "admin"]),
   async (req, res) => {
-    const businesses = await Business.find({ ownerId: req.user.id });
+    const businesses = await Business.find({ ownerId: req.user.id }).lean();
     res.json(businesses);
   }
 );
 
-// ---------------- SERVER START ----------------
+// ---------------- TEST ----------------
+app.get("/", (req, res) => {
+  res.send("✅ Dial4Service Backend Running 🚀");
+});
+
+// ---------------- SERVER ----------------
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
