@@ -60,7 +60,7 @@ const auth = (roles = []) => {
 // Register
 app.post("/api/auth/register", async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     const hash = await bcrypt.hash(password, 10);
 
@@ -68,13 +68,15 @@ app.post("/api/auth/register", async (req, res) => {
       name,
       email,
       password: hash,
-      role: role || "user",
+      role: ROLES.USER // FORCE USER ROLE
     });
 
     await user.save();
-    res.json({ msg: "Registered successfully" });
+
+    res.json({ message: "Registered successfully" });
+
   } catch (err) {
-    res.status(400).json({ msg: "User already exists" });
+    res.status(400).json({ message: "Registration failed" });
   }
 });
 
